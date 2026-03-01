@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>thealxlabs — stack</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0a0a;--fg:#f0f0f0;--accent:#ff3c00;--accent2:#00ffcc;--accent3:#ffe600;--border:rgba(255,255,255,0.08);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--fg);font-family:'Space Mono',monospace;min-height:100vh;overflow-x:hidden;cursor:crosshair;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:40px 40px;z-index:0;pointer-events:none;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-16px);}}
+  @keyframes fillbar{from{width:0;}to{width:var(--w);}}
+
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+  .topbar-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:56px;}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.08em;color:var(--fg);text-decoration:none;}
+  .logo span{color:var(--accent);}
+  .nav-links{display:flex;gap:2px;}
+  .nav-links a{color:rgba(255,255,255,0.38);text-decoration:none;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:6px 11px;transition:all 0.2s;border:1px solid transparent;}
+  .nav-links a:hover,.nav-links a.active{color:var(--accent2);border-color:rgba(0,255,204,0.2);}
+  .nav-right{display:flex;gap:8px;align-items:center;}
+  .status-pill{display:flex;align-items:center;gap:6px;font-size:0.57rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent2);border:1px solid rgba(0,255,204,0.2);padding:5px 10px;background:rgba(0,255,204,0.04);}
+  .status-dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite;}
+  .live-clock{font-size:0.57rem;color:rgba(255,255,255,0.26);}
+  .social-pill{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.36);text-decoration:none;font-size:0.61rem;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--border);padding:5px 10px;transition:all 0.2s;}
+  .social-pill:hover{color:var(--fg);border-color:var(--accent2);}
+  .container{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  .fade-up{opacity:0;transform:translateY(18px);animation:fadeUp 0.55s forwards;}
+  .d1{animation-delay:0.05s;}.d2{animation-delay:0.15s;}.d3{animation-delay:0.28s;}
+
+  .page-header{padding:60px 0 50px;position:relative;}
+  .page-tag{display:inline-block;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:3px 9px;margin-bottom:18px;}
+  .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,8vw,7rem);line-height:0.9;margin-bottom:16px;}
+  .page-title .outline{color:transparent;-webkit-text-stroke:1.5px var(--accent3);}
+  .page-desc{font-size:0.78rem;color:rgba(255,255,255,0.42);line-height:1.8;max-width:480px;}
+  .page-deco{position:absolute;right:0;top:40px;font-family:'Bebas Neue',sans-serif;font-size:8rem;opacity:0.04;pointer-events:none;user-select:none;animation:float 6s ease-in-out infinite;}
+
+  /* CATEGORY */
+  .cat-section{margin-bottom:48px;}
+  .cat-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .cat-icon{font-size:1.2rem;}
+  .cat-name{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.06em;}
+  .cat-desc{font-size:0.62rem;color:rgba(255,255,255,0.28);letter-spacing:0.1em;text-transform:uppercase;}
+
+  /* STACK GRID */
+  .stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:2px;}
+  .stack-item{border:1px solid var(--border);padding:22px 18px;background:rgba(255,255,255,0.015);transition:all 0.18s;position:relative;overflow:hidden;}
+  .stack-item::before{content:'';position:absolute;bottom:0;left:0;height:2px;background:var(--accent3);width:0;transition:width 0.4s;}
+  .stack-item:hover::before{width:100%;}
+  .stack-item:hover{border-color:var(--accent3);background:rgba(255,230,0,0.025);transform:translateY(-3px);}
+  .stack-icon{font-size:1.5rem;margin-bottom:10px;display:block;}
+  .stack-name{font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:3px;}
+  .stack-type{font-size:0.52rem;letter-spacing:0.08em;color:rgba(255,255,255,0.2);text-transform:uppercase;}
+
+  /* SKILL BARS */
+  .skills-block{border:1px solid var(--border);padding:32px;background:rgba(255,255,255,0.015);}
+  .skill-row{margin-bottom:18px;}
+  .skill-row:last-child{margin-bottom:0;}
+  .skill-header{display:flex;justify-content:space-between;margin-bottom:6px;}
+  .skill-name{font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.55);}
+  .skill-pct{font-size:0.62rem;color:var(--accent2);}
+  .skill-bar{height:2px;background:rgba(255,255,255,0.06);position:relative;overflow:hidden;}
+  .skill-fill{height:100%;background:var(--accent2);animation:fillbar 1.2s ease forwards;animation-delay:0.3s;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:2px;}
+
+  .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);margin:48px 0;}
+
+  footer{border-top:1px solid var(--border);padding:34px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-top:60px;}
+  .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:rgba(255,255,255,0.15);letter-spacing:0.1em;}
+  .footer-links{display:flex;gap:16px;}
+  .footer-links a{font-size:0.57rem;color:rgba(255,255,255,0.24);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+  .footer-links a:hover{color:var(--accent2);}
+  .footer-copy{font-size:0.57rem;color:rgba(255,255,255,0.15);}
+  .cursor-glow{position:fixed;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(255,230,0,0.04) 0%,transparent 70%);pointer-events:none;transform:translate(-50%,-50%);z-index:0;left:-999px;top:-999px;}
+  @media(max-width:700px){.nav-links{display:none;}.two-col{grid-template-columns:1fr;}}
+</style>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.ico">
+</head>
+<body>
+<div class="cursor-glow" id="glow"></div>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="/" class="logo">the<span>alx</span>labs ⚗️</a>
+    <div class="nav-right">
+      <nav class="nav-links">
+      <a href="/">Home</a>
+      <a href="/projects">Projects</a>
+      <a href="/photos">Photos</a>
+      <a href="/about">About</a>
+      <a href="/uses">Uses</a>
+      <a href="/notes">Notes</a>
+      <a href="/stack" class="active">Stack</a>
+      <a href="/contact">Contact</a>
+        <a href="/guestbook">Guestbook</a>
+      </nav>
+      <div class="nav-divider"></div>
+      <div class="status-pill"><div class="status-dot"></div><span class="live-clock" id="clock"></span></div>
+      <a href="https://github.com/thealxlabs" target="_blank" class="social-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>GitHub</a>
+      <a href="https://twitter.com/thealxlabs" target="_blank" class="social-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Twitter</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="page-header">
+    <div class="page-deco">SYS</div>
+    <div class="page-tag fade-up d1">// TECH_ARRAY</div>
+    <div class="page-title fade-up d2">THE<br/><span class="outline">STACK.</span></div>
+    <p class="page-desc fade-up d3">Tools of the trade. Everything powering the lab — frontend, backend, design, and the camera I carry everywhere.</p>
+  </div>
+
+  <!-- FRONTEND -->
+  <div class="cat-section">
+    <div class="cat-header"><span class="cat-icon">⚛️</span><span class="cat-name">Frontend</span><span class="cat-desc">// what you see</span></div>
+    <div class="stack-grid">
+      <div class="stack-item"><span class="stack-icon">⚛️</span><div class="stack-name">React.js</div><div class="stack-type">UI Framework</div></div>
+      <div class="stack-item"><span class="stack-icon">▲</span><div class="stack-name">Next.js</div><div class="stack-type">Framework</div></div>
+      <div class="stack-item"><span class="stack-icon">⚡</span><div class="stack-name">Vite</div><div class="stack-type">Build Tool</div></div>
+      <div class="stack-item"><span class="stack-icon">💨</span><div class="stack-name">Tailwind CSS</div><div class="stack-type">Styling</div></div>
+      <div class="stack-item"><span class="stack-icon">🔷</span><div class="stack-name">TypeScript</div><div class="stack-type">Language</div></div>
+      <div class="stack-item"><span class="stack-icon">🟨</span><div class="stack-name">JavaScript ES6+</div><div class="stack-type">Language</div></div>
+    </div>
+  </div>
+
+  <!-- BACKEND -->
+  <div class="cat-section">
+    <div class="cat-header"><span class="cat-icon">🌿</span><span class="cat-name">Backend</span><span class="cat-desc">// what keeps it running</span></div>
+    <div class="stack-grid">
+      <div class="stack-item"><span class="stack-icon">🌿</span><div class="stack-name">Node.js</div><div class="stack-type">Runtime</div></div>
+      <div class="stack-item"><span class="stack-icon">🐘</span><div class="stack-name">PostgreSQL</div><div class="stack-type">Database</div></div>
+      <div class="stack-item"><span class="stack-icon">🔥</span><div class="stack-name">Supabase</div><div class="stack-type">Backend-as-a-Service</div></div>
+      <div class="stack-item"><span class="stack-icon">🤖</span><div class="stack-name">AI / LLMs</div><div class="stack-type">Experiments</div></div>
+    </div>
+  </div>
+
+  <!-- DESIGN & TOOLS -->
+  <div class="cat-section">
+    <div class="cat-header"><span class="cat-icon">🎨</span><span class="cat-name">Design & Tools</span><span class="cat-desc">// how it looks and ships</span></div>
+    <div class="stack-grid">
+      <div class="stack-item"><span class="stack-icon">🎨</span><div class="stack-name">Figma</div><div class="stack-type">Design</div></div>
+      <div class="stack-item"><span class="stack-icon">🚀</span><div class="stack-name">Vercel</div><div class="stack-type">Hosting</div></div>
+      <div class="stack-item"><span class="stack-icon">🐙</span><div class="stack-name">GitHub</div><div class="stack-type">Version Control</div></div>
+      <div class="stack-item"><span class="stack-icon">🌐</span><div class="stack-name">.ca Domain</div><div class="stack-type">thealxlabs.ca</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SKILL BARS + OPTICS side by side -->
+  <div class="two-col">
+    <div class="skills-block">
+      <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent2);margin-bottom:22px;">// proficiency</div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">React / Frontend</span><span class="skill-pct">95%</span></div><div class="skill-bar"><div class="skill-fill" style="--w:95%;width:0%"></div></div></div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">JavaScript / TS</span><span class="skill-pct">90%</span></div><div class="skill-bar"><div class="skill-fill" style="--w:90%;width:0%"></div></div></div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">UI / Design Systems</span><span class="skill-pct">85%</span></div><div class="skill-bar"><div class="skill-fill" style="--w:85%;width:0%"></div></div></div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">Node / Backend</span><span class="skill-pct">75%</span></div><div class="skill-bar"><div class="skill-fill" style="--w:75%;width:0%"></div></div></div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">Databases</span><span class="skill-pct">70%</span></div><div class="skill-bar"><div class="skill-fill" style="--w:70%;width:0%"></div></div></div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">AI / LLM Integration</span><span class="skill-pct">65%</span></div><div class="skill-bar"><div class="skill-fill" style="--w:65%;width:0%"></div></div></div>
+    </div>
+    <div class="skills-block" style="background:rgba(255,60,0,0.02);">
+      <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;">// hardware · optics</div>
+      <div style="margin-bottom:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;margin-bottom:6px;">NIKON D3200</div>
+        <div style="font-size:0.68rem;color:rgba(255,255,255,0.38);line-height:1.75;">24.2 megapixel APS-C sensor. Paired with a 55mm prime. Manual focus, manual exposure. The way it was meant to be shot.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,0.06);">
+        <div style="background:var(--bg);padding:14px 12px;"><div style="font-size:0.52rem;color:rgba(255,255,255,0.24);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Sensor</div><div style="font-size:0.7rem;color:var(--accent3);">APS-C 24.2MP</div></div>
+        <div style="background:var(--bg);padding:14px 12px;"><div style="font-size:0.52rem;color:rgba(255,255,255,0.24);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Lens</div><div style="font-size:0.7rem;color:var(--accent3);">55mm Prime</div></div>
+        <div style="background:var(--bg);padding:14px 12px;"><div style="font-size:0.52rem;color:rgba(255,255,255,0.24);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Subject</div><div style="font-size:0.7rem;color:var(--accent3);">Urban / Architecture</div></div>
+        <div style="background:var(--bg);padding:14px 12px;"><div style="font-size:0.52rem;color:rgba(255,255,255,0.24);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">City</div><div style="font-size:0.7rem;color:var(--accent3);">Toronto, CA</div></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">THEALXLABS</div>
+    <div class="footer-links"><a href="/">Home</a><a href="/projects">Projects</a><a href="/about">About</a><a href="/contact">Contact</a><a href="https://github.com/thealxlabs" target="_blank">GitHub</a></div>
+    <div class="footer-copy">© 2026 thealxlabs.ca 🇨🇦</div>
+  </footer>
+</div>
+
+<script>
+  // cursor glow
+  document.addEventListener('mousemove',e=>{const g=document.getElementById('glow');if(g){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';}});
+  // cursor trail
+  (function(){const trail=[];for(let i=0;i<12;i++){const d=document.createElement('div');d.style.cssText='position:fixed;width:6px;height:6px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:9999;opacity:0;transition:opacity 0.3s;transform:translate(-50%,-50%)';document.body.appendChild(d);trail.push({el:d,x:0,y:0});}let mx=0,my=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});setInterval(()=>{let lx=mx,ly=my;trail.forEach((t,i)=>{const ox=lx,oy=ly;t.el.style.left=t.x+'px';t.el.style.top=t.y+'px';t.el.style.opacity=String((12-i)/24);t.el.style.width=(6-i*0.3)+'px';t.el.style.height=(6-i*0.3)+'px';lx=t.x;ly=t.y;t.x+=(ox-t.x)*0.35;t.y+=(oy-t.y)*0.35;});},16);})();
+  // logo glitch
+  const logo=document.querySelector('.logo');if(logo)logo.addEventListener('mouseenter',()=>{logo.style.transform=`skewX(${(Math.random()-0.5)*6}deg)`;setTimeout(()=>logo.style.transform='',150);});
+  // clock
+  function tick(){const el=document.getElementById('clock');if(el)el.textContent=new Date().toLocaleTimeString('en-CA',{timeZone:'America/Toronto',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+' ET';}tick();setInterval(tick,1000);
+  // EASTER EGG - type ALX
+  (function(){let buf='';document.addEventListener('keydown',e=>{buf=(buf+e.key).slice(-3).toUpperCase();if(buf==='ALX'){buf='';const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0a0a;cursor:pointer;';o.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:clamp(4rem,15vw,12rem);color:#ff3c00;animation:glitch 0.3s infinite;line-height:0.9;text-align:center">THE<br/>ALX<br/>LABS</div><div style="font-family:Space Mono,monospace;font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:24px;letter-spacing:0.2em">// YOU FOUND THE EASTER EGG. CLICK TO ESCAPE.</div><style>@keyframes glitch{0%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}33%{text-shadow:-3px 0 #ffe600,3px 0 #00ffcc;}66%{text-shadow:3px 2px #ff3c00,-3px -2px #00ffcc;}100%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}}</style>';document.body.appendChild(o);o.addEventListener('click',()=>o.remove());}});})();
+</script>
+</body>
+</html>

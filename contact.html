@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>thealxlabs — contact</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0a0a;--fg:#f0f0f0;--accent:#ff3c00;--accent2:#00ffcc;--accent3:#ffe600;--border:rgba(255,255,255,0.08);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--fg);font-family:'Space Mono',monospace;min-height:100vh;overflow-x:hidden;cursor:crosshair;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:40px 40px;z-index:0;pointer-events:none;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-16px);}}
+  @keyframes blink{50%{opacity:0;}}
+
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+  .topbar-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:56px;}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.08em;color:var(--fg);text-decoration:none;}
+  .logo span{color:var(--accent);}
+  .nav-links{display:flex;gap:2px;}
+  .nav-links a{color:rgba(255,255,255,0.38);text-decoration:none;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:6px 11px;transition:all 0.2s;border:1px solid transparent;}
+  .nav-links a:hover,.nav-links a.active{color:var(--accent2);border-color:rgba(0,255,204,0.2);}
+  .nav-right{display:flex;gap:8px;align-items:center;}
+  .status-pill{display:flex;align-items:center;gap:6px;font-size:0.57rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent2);border:1px solid rgba(0,255,204,0.2);padding:5px 10px;background:rgba(0,255,204,0.04);}
+  .status-dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite;}
+  .live-clock{font-size:0.57rem;color:rgba(255,255,255,0.26);}
+  .social-pill{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.36);text-decoration:none;font-size:0.61rem;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--border);padding:5px 10px;transition:all 0.2s;}
+  .social-pill:hover{color:var(--fg);border-color:var(--accent2);}
+  .container{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  .fade-up{opacity:0;transform:translateY(18px);animation:fadeUp 0.55s forwards;}
+  .d1{animation-delay:0.05s;}.d2{animation-delay:0.15s;}.d3{animation-delay:0.28s;}.d4{animation-delay:0.4s;}
+
+  .page-header{padding:60px 0 50px;position:relative;}
+  .page-tag{display:inline-block;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:3px 9px;margin-bottom:18px;}
+  .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,8vw,7rem);line-height:0.9;margin-bottom:16px;}
+  .page-title .outline{color:transparent;-webkit-text-stroke:1.5px var(--accent);}
+  .page-desc{font-size:0.78rem;color:rgba(255,255,255,0.42);line-height:1.8;max-width:500px;}
+  .page-deco{position:absolute;right:0;top:40px;font-family:'Bebas Neue',sans-serif;font-size:8rem;opacity:0.04;pointer-events:none;user-select:none;animation:float 6s ease-in-out infinite;}
+
+  /* CONTACT CARDS */
+  .contact-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:2px;margin-bottom:2px;}
+  .contact-card{border:1px solid var(--border);padding:32px;background:rgba(255,255,255,0.015);text-decoration:none;color:var(--fg);display:block;transition:all 0.18s;position:relative;overflow:hidden;}
+  .contact-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent2);transform:scaleX(0);transition:transform 0.3s;}
+  .contact-card:hover::before{transform:scaleX(1);}
+  .contact-card:hover{border-color:rgba(0,255,204,0.25);transform:translateY(-3px);background:rgba(0,255,204,0.02);}
+  .contact-card.red:hover{border-color:rgba(255,60,0,0.25);background:rgba(255,60,0,0.02);}
+  .contact-card.red::before{background:var(--accent);}
+  .contact-card.yellow:hover{border-color:rgba(255,230,0,0.25);background:rgba(255,230,0,0.02);}
+  .contact-card.yellow::before{background:var(--accent3);}
+  .cc-icon{font-size:1.8rem;margin-bottom:14px;display:block;}
+  .cc-platform{font-size:0.56rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:6px;}
+  .cc-name{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.04em;margin-bottom:8px;}
+  .cc-handle{font-size:0.68rem;color:rgba(255,255,255,0.38);margin-bottom:14px;}
+  .cc-action{font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);display:flex;align-items:center;gap:6px;}
+  .contact-card.red .cc-action{color:var(--accent);}
+  .contact-card.yellow .cc-action{color:var(--accent3);}
+
+  /* AVAILABILITY */
+  .avail-block{border:1px solid var(--border);padding:36px;background:rgba(255,255,255,0.015);position:relative;overflow:hidden;}
+  .avail-block::before{content:'// SYNC_PROTOCOLS';position:absolute;top:14px;right:18px;font-size:0.52rem;letter-spacing:0.12em;color:rgba(255,255,255,0.1);}
+  .avail-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;margin-bottom:10px;}
+  .avail-title em{font-style:normal;color:var(--accent);}
+  .avail-desc{font-size:0.76rem;color:rgba(255,255,255,0.4);line-height:1.8;max-width:540px;margin-bottom:22px;}
+  .avail-tags{display:flex;gap:8px;flex-wrap:wrap;}
+  .avail-tag{font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;border:1px solid var(--border);padding:5px 12px;color:rgba(255,255,255,0.32);}
+  .avail-tag.open{border-color:rgba(0,255,204,0.3);color:var(--accent2);background:rgba(0,255,204,0.04);}
+  .avail-tag.closed{border-color:rgba(255,60,0,0.25);color:rgba(255,60,0,0.6);}
+
+  /* LOCATION */
+  .location-block{border:1px solid var(--border);padding:28px 32px;background:rgba(255,255,255,0.015);display:flex;align-items:center;gap:24px;}
+  .loc-icon{font-size:2rem;opacity:0.7;}
+  .loc-city{font-family:'Bebas Neue',sans-serif;font-size:2rem;line-height:1;}
+  .loc-detail{font-size:0.66rem;color:rgba(255,255,255,0.3);margin-top:3px;letter-spacing:0.08em;}
+  .loc-time{font-size:0.66rem;color:var(--accent2);margin-top:5px;letter-spacing:0.06em;}
+
+  .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);margin:48px 0;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+
+  footer{border-top:1px solid var(--border);padding:34px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-top:60px;}
+  .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:rgba(255,255,255,0.15);letter-spacing:0.1em;}
+  .footer-links{display:flex;gap:16px;}
+  .footer-links a{font-size:0.57rem;color:rgba(255,255,255,0.24);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+  .footer-links a:hover{color:var(--accent2);}
+  .footer-copy{font-size:0.57rem;color:rgba(255,255,255,0.15);}
+  .cursor-glow{position:fixed;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(0,255,204,0.04) 0%,transparent 70%);pointer-events:none;transform:translate(-50%,-50%);z-index:0;left:-999px;top:-999px;}
+  @media(max-width:700px){.nav-links{display:none;}.two-col{grid-template-columns:1fr;}}
+</style>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.ico">
+</head>
+<body>
+<div class="cursor-glow" id="glow"></div>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="/" class="logo">the<span>alx</span>labs ⚗️</a>
+    <div class="nav-right">
+      <nav class="nav-links">
+      <a href="/">Home</a>
+      <a href="/projects">Projects</a>
+      <a href="/photos">Photos</a>
+      <a href="/about">About</a>
+      <a href="/uses">Uses</a>
+      <a href="/notes">Notes</a>
+      <a href="/stack">Stack</a>
+      <a href="/contact" class="active">Contact</a>
+      </nav>
+      <div class="nav-divider"></div>
+      <div class="status-pill"><div class="status-dot"></div><span class="live-clock" id="clock"></span></div>
+      <a href="https://github.com/thealxlabs" target="_blank" class="social-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>GitHub</a>
+      <a href="https://twitter.com/thealxlabs" target="_blank" class="social-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Twitter</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="page-header">
+    <div class="page-deco">HI</div>
+    <div class="page-tag fade-up d1">// SYNC_PROTOCOLS</div>
+    <div class="page-title fade-up d2">SAY<br/><span class="outline">HI.</span></div>
+    <p class="page-desc fade-up d3">Not taking on client work, but always down to chat about cool projects, collabs, or just what you're building. Find me wherever.</p>
+  </div>
+
+  <div class="contact-grid fade-up d4">
+    <a href="https://twitter.com/thealxlabs" target="_blank" class="contact-card">
+      <span class="cc-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></span>
+      <div class="cc-platform">// Social</div>
+      <div class="cc-name">Twitter / X</div>
+      <div class="cc-handle">@thealxlabs</div>
+      <div class="cc-action">DM me ↗</div>
+    </a>
+
+    <a href="https://github.com/thealxlabs" target="_blank" class="contact-card red">
+      <span class="cc-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></span>
+      <div class="cc-platform">// Code</div>
+      <div class="cc-name">GitHub</div>
+      <div class="cc-handle">@thealxlabs</div>
+      <div class="cc-action">Follow ↗</div>
+    </a>
+
+    <a href="https://www.instagram.com/alexedgraphy" target="_blank" class="contact-card yellow">
+      <span class="cc-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></span>
+      <div class="cc-platform">// Photography</div>
+      <div class="cc-name">Instagram</div>
+      <div class="cc-handle">@alexedgraphy</div>
+      <div class="cc-action">View work ↗</div>
+    </a>
+
+    <a href="mailto:hello@thealxlabs.ca" class="contact-card">
+      <span class="cc-icon">✉️</span>
+      <div class="cc-platform">// Direct</div>
+      <div class="cc-name">Email</div>
+      <div class="cc-handle">hello@thealxlabs.ca</div>
+      <div class="cc-action">Send it ↗</div>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="two-col">
+    <div class="avail-block">
+      <div class="avail-title">WHAT I'M <em>OPEN TO</em></div>
+      <p class="avail-desc">No client work right now — just building what excites me. But always happy to connect around collabs, community stuff, or just talking shop about what you're making.</p>
+      <div class="avail-tags">
+        <span class="avail-tag open">✓ Collabs</span>
+        <span class="avail-tag open">✓ Community</span>
+        <span class="avail-tag open">✓ Open Source</span>
+        <span class="avail-tag open">✓ Just chatting</span>
+        <span class="avail-tag closed">✗ Client work</span>
+        <span class="avail-tag closed">✗ Freelance</span>
+      </div>
+    </div>
+
+    <div class="location-block">
+      <span class="loc-icon">📍</span>
+      <div>
+        <div class="loc-city">TORONTO, CA</div>
+        <div class="loc-detail">Ontario · Eastern Time Zone</div>
+        <div class="loc-time" id="torontoTime">Loading time...</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">THEALXLABS</div>
+    <div class="footer-links"><a href="/">Home</a><a href="/projects">Projects</a><a href="/about">About</a><a href="/stack">Stack</a><a href="https://github.com/thealxlabs" target="_blank">GitHub</a></div>
+    <div class="footer-copy">© 2026 thealxlabs.ca 🇨🇦</div>
+  </footer>
+</div>
+
+<script>
+  // cursor glow
+  document.addEventListener('mousemove',e=>{const g=document.getElementById('glow');if(g){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';}});
+  // cursor trail
+  (function(){const trail=[];for(let i=0;i<12;i++){const d=document.createElement('div');d.style.cssText='position:fixed;width:6px;height:6px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:9999;opacity:0;transition:opacity 0.3s;transform:translate(-50%,-50%)';document.body.appendChild(d);trail.push({el:d,x:0,y:0});}let mx=0,my=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});setInterval(()=>{let lx=mx,ly=my;trail.forEach((t,i)=>{const ox=lx,oy=ly;t.el.style.left=t.x+'px';t.el.style.top=t.y+'px';t.el.style.opacity=String((12-i)/24);t.el.style.width=(6-i*0.3)+'px';t.el.style.height=(6-i*0.3)+'px';lx=t.x;ly=t.y;t.x+=(ox-t.x)*0.35;t.y+=(oy-t.y)*0.35;});},16);})();
+  // logo glitch
+  const logo=document.querySelector('.logo');if(logo)logo.addEventListener('mouseenter',()=>{logo.style.transform=`skewX(${(Math.random()-0.5)*6}deg)`;setTimeout(()=>logo.style.transform='',150);});
+  // clock
+  function tick(){const el=document.getElementById('clock');if(el)el.textContent=new Date().toLocaleTimeString('en-CA',{timeZone:'America/Toronto',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+' ET';}tick();setInterval(tick,1000);
+  // EASTER EGG - type ALX
+  (function(){let buf='';document.addEventListener('keydown',e=>{buf=(buf+e.key).slice(-3).toUpperCase();if(buf==='ALX'){buf='';const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0a0a;cursor:pointer;';o.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:clamp(4rem,15vw,12rem);color:#ff3c00;animation:glitch 0.3s infinite;line-height:0.9;text-align:center">THE<br/>ALX<br/>LABS</div><div style="font-family:Space Mono,monospace;font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:24px;letter-spacing:0.2em">// YOU FOUND THE EASTER EGG. CLICK TO ESCAPE.</div><style>@keyframes glitch{0%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}33%{text-shadow:-3px 0 #ffe600,3px 0 #00ffcc;}66%{text-shadow:3px 2px #ff3c00,-3px -2px #00ffcc;}100%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}}</style>';document.body.appendChild(o);o.addEventListener('click',()=>o.remove());}});})();
+</script>
+</body>
+</html>

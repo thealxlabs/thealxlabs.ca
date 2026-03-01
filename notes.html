@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>thealxlabs — notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0a0a;--fg:#f0f0f0;--accent:#ff3c00;--accent2:#00ffcc;--accent3:#ffe600;--border:rgba(255,255,255,0.08);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--fg);font-family:'Space Mono',monospace;min-height:100vh;overflow-x:hidden;cursor:crosshair;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:40px 40px;z-index:0;pointer-events:none;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+  @keyframes blink{50%{opacity:0;}}
+
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+  .topbar-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:56px;}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.08em;color:var(--fg);text-decoration:none;}
+  .logo span{color:var(--accent);}
+  .nav-right{display:flex;gap:6px;align-items:center;}
+  .nav-links{display:flex;gap:2px;margin-right:4px;}
+  .nav-links a{color:rgba(255,255,255,0.38);text-decoration:none;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:6px 11px;transition:all 0.2s;border:1px solid transparent;}
+  .nav-links a:hover,.nav-links a.active{color:var(--accent2);border-color:rgba(0,255,204,0.2);}
+  .nav-divider{width:1px;height:20px;background:var(--border);margin:0 4px;}
+  .status-pill{display:flex;align-items:center;gap:6px;font-size:0.57rem;color:var(--accent2);border:1px solid rgba(0,255,204,0.2);padding:5px 10px;background:rgba(0,255,204,0.04);}
+  .status-dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite;}
+  .live-clock{font-size:0.57rem;color:rgba(255,255,255,0.26);}
+  .social-pill{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.36);text-decoration:none;font-size:0.61rem;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--border);padding:5px 10px;transition:all 0.2s;}
+  .social-pill:hover{color:var(--fg);border-color:var(--accent2);}
+  .container{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 24px;}
+  .cursor-glow{position:fixed;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(0,255,204,0.04) 0%,transparent 70%);pointer-events:none;transform:translate(-50%,-50%);z-index:0;left:-999px;top:-999px;}
+
+  .fade-up{opacity:0;transform:translateY(18px);animation:fadeUp 0.55s forwards;}
+  .d1{animation-delay:0.05s;}.d2{animation-delay:0.15s;}.d3{animation-delay:0.28s;}
+
+  .page-header{padding:60px 0 50px;position:relative;}
+  .page-tag{display:inline-block;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent2);border:1px solid var(--accent2);padding:3px 9px;margin-bottom:18px;}
+  .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,8vw,7rem);line-height:0.9;margin-bottom:16px;}
+  .page-title .outline{color:transparent;-webkit-text-stroke:1.5px var(--accent2);}
+  .page-desc{font-size:0.78rem;color:rgba(255,255,255,0.42);line-height:1.8;max-width:500px;}
+  .page-deco{position:absolute;right:0;top:40px;font-family:'Bebas Neue',sans-serif;font-size:8rem;opacity:0.04;pointer-events:none;animation:float 6s ease-in-out infinite;}
+
+  /* NOTES LAYOUT */
+  .notes-layout{display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:start;}
+  @media(max-width:800px){.notes-layout{grid-template-columns:1fr;}}
+
+  /* NOTE CARDS */
+  .notes-list{display:flex;flex-direction:column;gap:2px;}
+
+  .note-card{border:1px solid var(--border);padding:28px 32px;background:rgba(255,255,255,0.015);text-decoration:none;color:var(--fg);display:block;transition:all 0.18s;position:relative;overflow:hidden;}
+  .note-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent2);transform:scaleY(0);transition:transform 0.3s;transform-origin:bottom;}
+  .note-card:hover::before{transform:scaleY(1);}
+  .note-card:hover{border-color:rgba(0,255,204,0.2);background:rgba(0,255,204,0.02);padding-left:36px;}
+  .note-card.featured{border-color:rgba(255,60,0,0.2);background:rgba(255,60,0,0.02);}
+  .note-card.featured::before{background:var(--accent);}
+
+  .note-meta{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+  .note-num{font-size:0.55rem;letter-spacing:0.15em;color:rgba(255,255,255,0.2);}
+  .note-date{font-size:0.55rem;letter-spacing:0.1em;color:rgba(255,255,255,0.24);}
+  .note-tag{font-size:0.5rem;letter-spacing:0.15em;text-transform:uppercase;border:1px solid;padding:1px 6px;}
+  .tag-code{color:var(--accent2);border-color:rgba(0,255,204,0.2);}
+  .tag-design{color:var(--accent3);border-color:rgba(255,230,0,0.2);}
+  .tag-life{color:rgba(255,255,255,0.4);border-color:rgba(255,255,255,0.1);}
+  .tag-photo{color:var(--accent);border-color:rgba(255,60,0,0.2);}
+  .tag-hot{color:#fff;background:var(--accent);border-color:var(--accent);font-weight:700;}
+
+  .note-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.03em;margin-bottom:8px;line-height:1;}
+  .note-excerpt{font-size:0.7rem;line-height:1.75;color:rgba(255,255,255,0.38);margin-bottom:12px;}
+  .note-read{font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.24);display:flex;align-items:center;gap:6px;transition:color 0.2s;}
+  .note-card:hover .note-read{color:var(--accent2);}
+
+  /* SIDEBAR */
+  .sidebar{display:flex;flex-direction:column;gap:2px;position:sticky;top:72px;}
+  .sidebar-block{border:1px solid var(--border);padding:20px;background:rgba(255,255,255,0.015);}
+  .sidebar-title{font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:14px;}
+  .tag-cloud{display:flex;flex-wrap:wrap;gap:6px;}
+  .tag-cloud-item{font-size:0.56rem;letter-spacing:0.1em;text-transform:uppercase;border:1px solid var(--border);padding:4px 8px;color:rgba(255,255,255,0.28);cursor:pointer;transition:all 0.2s;}
+  .tag-cloud-item:hover{color:var(--accent2);border-color:rgba(0,255,204,0.3);}
+  .tag-cloud-item.active{color:var(--accent2);border-color:var(--accent2);background:rgba(0,255,204,0.06);}
+
+  .stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.65rem;}
+  .stat-row:last-child{border-bottom:none;}
+  .stat-row-label{color:rgba(255,255,255,0.28);letter-spacing:0.08em;}
+  .stat-row-val{color:var(--accent3);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;}
+
+  /* NOTE READER */
+  .note-reader{display:none;position:fixed;inset:0;z-index:500;background:rgba(10,10,10,0.98);backdrop-filter:blur(20px);overflow-y:auto;padding:60px 24px;}
+  .note-reader.open{display:block;}
+  .reader-inner{max-width:680px;margin:0 auto;}
+  .reader-close{font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;background:none;border:1px solid var(--border);color:rgba(255,255,255,0.4);padding:8px 16px;cursor:pointer;margin-bottom:40px;transition:all 0.2s;}
+  .reader-close:hover{color:var(--accent);border-color:var(--accent);}
+  .reader-tag{font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent2);margin-bottom:16px;}
+  .reader-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,5rem);line-height:0.9;margin-bottom:20px;}
+  .reader-meta{font-size:0.62rem;color:rgba(255,255,255,0.28);letter-spacing:0.1em;margin-bottom:40px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+  .reader-body{font-size:0.82rem;line-height:1.95;color:rgba(255,255,255,0.6);}
+  .reader-body p{margin-bottom:1.4em;}
+  .reader-body strong{color:var(--fg);}
+  .reader-body em{color:var(--accent2);font-style:normal;}
+
+  footer{border-top:1px solid var(--border);padding:34px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-top:60px;}
+  .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:rgba(255,255,255,0.15);letter-spacing:0.1em;}
+  .footer-links{display:flex;gap:16px;}
+  .footer-links a{font-size:0.57rem;color:rgba(255,255,255,0.24);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+  .footer-links a:hover{color:var(--accent2);}
+  .footer-copy{font-size:0.57rem;color:rgba(255,255,255,0.15);}
+  @media(max-width:700px){.nav-links{display:none;}}
+</style>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.ico">
+</head>
+<body>
+<div class="cursor-glow" id="glow"></div>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="/" class="logo">the<span>alx</span>labs ⚗️</a>
+    <div class="nav-right">
+      <nav class="nav-links">
+        <a href="/">Home</a><a href="/projects">Projects</a><a href="/photos">Photos</a><a href="/about">About</a><a href="/uses">Uses</a><a href="/notes" class="active">Notes</a><a href="/stack">Stack</a><a href="/contact">Contact</a>
+        <a href="/guestbook">Guestbook</a>
+      </nav>
+      <div class="nav-divider"></div>
+      <div class="status-pill"><div class="status-dot"></div><span class="live-clock" id="clock"></span></div>
+      <a href="https://github.com/thealxlabs" target="_blank" class="social-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>GitHub</a>
+      <a href="https://twitter.com/thealxlabs" target="_blank" class="social-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Twitter</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="page-header">
+    <div class="page-deco">✎</div>
+    <div class="page-tag fade-up d1">// Thoughts from the lab</div>
+    <div class="page-title fade-up d2">LAB<br/><span class="outline">NOTES.</span></div>
+    <p class="page-desc fade-up d3">Short-form thoughts on code, design, photography, and building things alone at night. Not a blog. Just notes.</p>
+  </div>
+
+  <div class="notes-layout">
+    <div class="notes-list" id="notesList">
+
+      <div class="note-card featured" onclick="openNote(0)">
+        <div class="note-meta"><span class="note-num">#008</span><span class="note-date">Mar 2026</span><span class="note-tag tag-hot">🔥 Latest</span><span class="note-tag tag-code">Code</span></div>
+        <div class="note-title">Ship it messy, iterate in public</div>
+        <div class="note-excerpt">The perfect product that never ships helps exactly nobody. I've been thinking about the gap between "done" and "good enough to exist in the world" — and why that gap is where most things die.</div>
+        <div class="note-read">Read note →</div>
+      </div>
+
+      <div class="note-card" onclick="openNote(1)">
+        <div class="note-meta"><span class="note-num">#007</span><span class="note-date">Feb 2026</span><span class="note-tag tag-design">Design</span></div>
+        <div class="note-title">Industrial minimalism isn't about less</div>
+        <div class="note-excerpt">People confuse minimalism with removing things. Industrial minimalism is about making every remaining element earn its place. The factory floor has no decoration — but every machine has a reason.</div>
+        <div class="note-read">Read note →</div>
+      </div>
+
+      <div class="note-card" onclick="openNote(2)">
+        <div class="note-meta"><span class="note-num">#006</span><span class="note-date">Feb 2026</span><span class="note-tag tag-photo">Photo</span></div>
+        <div class="note-title">Why 55mm is the only focal length you need</div>
+        <div class="note-excerpt">55mm on APS-C is roughly what your eyes actually see. No compression, no distortion — just the world as it is. Shooting prime means you move your feet instead of your zoom ring. That changes everything.</div>
+        <div class="note-read">Read note →</div>
+      </div>
+
+      <div class="note-card" onclick="openNote(3)">
+        <div class="note-meta"><span class="note-num">#005</span><span class="note-date">Jan 2026</span><span class="note-tag tag-code">Code</span></div>
+        <div class="note-title">The case for boring technology</div>
+        <div class="note-excerpt">React, Node, Postgres. Not Svelte, Bun, PlanetScale. The new thing is exciting. The proven thing ships. When you're building alone, the stack should never be the interesting part of the problem.</div>
+        <div class="note-read">Read note →</div>
+      </div>
+
+      <div class="note-card" onclick="openNote(4)">
+        <div class="note-meta"><span class="note-num">#004</span><span class="note-date">Jan 2026</span><span class="note-tag tag-life">Life</span></div>
+        <div class="note-title">On building things alone</div>
+        <div class="note-excerpt">No standups, no PRs to review, no design reviews. Just you and the problem. The freedom is real but so is the silence. Here's what two years of building solo has taught me about staying motivated without external pressure.</div>
+        <div class="note-read">Read note →</div>
+      </div>
+
+      <div class="note-card" onclick="openNote(5)">
+        <div class="note-meta"><span class="note-num">#003</span><span class="note-date">Dec 2025</span><span class="note-tag tag-design">Design</span></div>
+        <div class="note-title">Dark mode is not an aesthetic, it's respect</div>
+        <div class="note-excerpt">If your app doesn't have dark mode, you're making a choice about who gets to use it comfortably. Screens at night, at desks, in dark rooms — this is most of where your app gets used. Act accordingly.</div>
+        <div class="note-read">Read note →</div>
+      </div>
+
+      <div class="note-card" onclick="openNote(6)">
+        <div class="note-meta"><span class="note-num">#002</span><span class="note-date">Nov 2025</span><span class="note-tag tag-photo">Photo</span></div>
+        <div class="note-title">Toronto's grid as a design system</div>
+        <div class="note-excerpt">The city is a system. Streets form a grid, buildings define the negative space, light creates hierarchy. I've been thinking about how urban planning and UI design solve the same problem — organizing chaos so humans can navigate it.</div>
+        <div class="note-read">Read note →</div>
+      </div>
+
+      <div class="note-card" onclick="openNote(7)">
+        <div class="note-meta"><span class="note-num">#001</span><span class="note-date">Oct 2025</span><span class="note-tag tag-life">Life</span></div>
+        <div class="note-title">Why I started a lab instead of a portfolio</div>
+        <div class="note-excerpt">A portfolio shows finished work. A lab shows the process. The mess, the experiments, the things that almost worked. I care more about the building than the having built — so the lab made more sense than the portfolio.</div>
+        <div class="note-read">Read note →</div>
+      </div>
+
+    </div>
+
+    <div class="sidebar">
+      <div class="sidebar-block">
+        <div class="sidebar-title">// Stats</div>
+        <div class="stat-row"><span class="stat-row-label">Total notes</span><span class="stat-row-val">8</span></div>
+        <div class="stat-row"><span class="stat-row-label">This year</span><span class="stat-row-val">4</span></div>
+        <div class="stat-row"><span class="stat-row-label">Avg length</span><span class="stat-row-val">~400w</span></div>
+        <div class="stat-row"><span class="stat-row-label">Last note</span><span class="stat-row-val">Mar '26</span></div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-title">// Filter by tag</div>
+        <div class="tag-cloud">
+          <span class="tag-cloud-item active" onclick="filterNotes('all',this)">All</span>
+          <span class="tag-cloud-item" onclick="filterNotes('code',this)">Code</span>
+          <span class="tag-cloud-item" onclick="filterNotes('design',this)">Design</span>
+          <span class="tag-cloud-item" onclick="filterNotes('photo',this)">Photo</span>
+          <span class="tag-cloud-item" onclick="filterNotes('life',this)">Life</span>
+        </div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-title">// Tip</div>
+        <div style="font-size:0.66rem;line-height:1.75;color:rgba(255,255,255,0.3)">These are short. Click any note to read the full thing. No newsletter, no subscribe button — just notes.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">THEALXLABS</div>
+    <div class="footer-links"><a href="/">Home</a><a href="/projects">Projects</a><a href="/about">About</a><a href="/contact">Contact</a></div>
+    <div class="footer-copy">© 2026 thealxlabs.ca 🇨🇦</div>
+  </footer>
+</div>
+
+<!-- NOTE READER -->
+<div class="note-reader" id="noteReader">
+  <div class="reader-inner">
+    <button class="reader-close" onclick="closeNote()">← Back to notes</button>
+    <div id="readerContent"></div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('mousemove',e=>{const g=document.getElementById('glow');if(g){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';}});
+  (function(){const trail=[];for(let i=0;i<12;i++){const d=document.createElement('div');d.style.cssText='position:fixed;width:6px;height:6px;border-radius:50%;background:var(--accent2);pointer-events:none;z-index:9999;opacity:0;transform:translate(-50%,-50%)';document.body.appendChild(d);trail.push({el:d,x:0,y:0});}let mx=0,my=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});setInterval(()=>{let lx=mx,ly=my;trail.forEach((t,i)=>{const ox=lx,oy=ly;t.el.style.left=t.x+'px';t.el.style.top=t.y+'px';t.el.style.opacity=String((12-i)/24);lx=t.x;ly=t.y;t.x+=(ox-t.x)*0.35;t.y+=(oy-t.y)*0.35;});},16);})();
+  const logo=document.querySelector('.logo');if(logo)logo.addEventListener('mouseenter',()=>{logo.style.transform=`skewX(${(Math.random()-0.5)*6}deg)`;setTimeout(()=>logo.style.transform='',150);});
+  function tick(){const el=document.getElementById('clock');if(el)el.textContent=new Date().toLocaleTimeString('en-CA',{timeZone:'America/Toronto',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+' ET';}tick();setInterval(tick,1000);
+  (function(){let buf='';document.addEventListener('keydown',e=>{buf=(buf+e.key).slice(-3).toUpperCase();if(buf==='ALX'){buf='';const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0a0a;cursor:pointer;';o.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:clamp(4rem,15vw,12rem);color:#ff3c00;animation:glitch 0.3s infinite;line-height:0.9;text-align:center">THE<br/>ALX<br/>LABS</div><div style="font-family:Space Mono,monospace;font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:24px;letter-spacing:0.2em">// YOU FOUND THE EASTER EGG. CLICK TO ESCAPE.</div><style>@keyframes glitch{0%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}33%{text-shadow:-3px 0 #ffe600,3px 0 #00ffcc;}66%{text-shadow:3px 2px #ff3c00,-3px -2px #00ffcc;}100%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}}</style>';document.body.appendChild(o);o.addEventListener('click',()=>o.remove());}});})();
+
+  const notes = [
+    {num:'#008',date:'Mar 2026',tag:'Code',title:'Ship it messy, iterate in public',body:`<p>The perfect product that never ships helps exactly nobody. I've been thinking about the gap between <strong>"done"</strong> and <strong>"good enough to exist in the world"</strong> — and why that gap is where most things die.</p><p>I've killed more projects by polishing them than by abandoning them. The polish becomes the point. You're no longer building something useful, you're building an artifact of your own perfectionism.</p><p>The lab exists partly as a forcing function against this. When you call it a lab, experiments are expected. <em>Experiments don't need to be perfect</em> — they need to produce information. Ship the thing, see what happens, use that to build the next one better.</p><p>The best feedback you'll ever get is from someone actually using what you made. No amount of internal iteration gets you there. Shipping messy beats not shipping at all, every single time.</p>`},
+    {num:'#007',date:'Feb 2026',tag:'Design',title:'Industrial minimalism isn\'t about less',body:`<p>People confuse minimalism with removing things. That's a surface-level reading of the aesthetic. <strong>Industrial minimalism is about intent</strong> — every element that remains has a reason for being there.</p><p>Look at a factory floor. It's not empty. It's dense with machinery, pipes, cables, structures. What it lacks is decoration. Nothing is there to look nice. Everything is there because it does something.</p><p>That's the principle I try to apply to UI. Not "remove everything" but "justify everything." Every color, every border, every piece of type — what is it doing? If you can't answer that, it probably shouldn't be there.</p><p><em>High contrast, functional hierarchy, structural grids</em>. These aren't aesthetic choices, they're outcomes of thinking clearly about what each element needs to communicate.</p>`},
+    {num:'#006',date:'Feb 2026',tag:'Photo',title:'Why 55mm is the only focal length you need',body:`<p>55mm on an APS-C sensor gives you roughly a 82mm equivalent field of view. That's close to what your eyes naturally frame when you're paying attention to something specific. No compression, no drama, no distortion — <strong>just the world as it is</strong>.</p><p>Wide angles lie about space. Telephotos compress it. A prime in the 50-55mm range tells the truth. What you see is what you get, which means the composition has to be right before you press the shutter.</p><p>And shooting prime means you move your feet. That changes how you see. Instead of standing in one place and zooming your way to a composition, you walk toward things, around things. <em>You engage with the subject physically.</em></p><p>The Nikon D3200 with the 55mm has been everywhere with me for two years. It's not glamorous gear. It's honest gear. It gets out of the way and lets you take pictures.</p>`},
+    {num:'#005',date:'Jan 2026',tag:'Code',title:'The case for boring technology',body:`<p>Every six months there's a new framework that promises to change everything. It's faster, simpler, more expressive. The benchmarks are impressive. The DX is incredible. The community is excited.</p><p>And then you spend three weekends fighting with its edge cases instead of building your product.</p><p><strong>Boring technology is good technology.</strong> React is boring. Node is boring. Postgres is boring. They're boring because they've been used by enough people to surface every edge case, write every workaround, answer every Stack Overflow question.</p><p>When you're building alone, <em>the stack should never be the interesting part</em>. The interesting part is the thing you're building. Use tools that get out of the way. Reach for proven, then optimize later when you actually know what you're optimizing.</p>`},
+    {num:'#004',date:'Jan 2026',tag:'Life',title:'On building things alone',body:`<p>Two years of building solo has taught me one thing above everything else: <strong>external pressure is a drug, and you need to find your own supply.</strong></p><p>In a team, there are standups that force you to have something to report. There are PRs that need review. There are deadlines that someone else set. These are annoying, but they keep you moving.</p><p>Alone, nothing moves unless you push it. The project sits exactly where you left it. The TODO list doesn't judge you. The GitHub commits don't commit themselves.</p><p>The things that work for me: shipping publicly (someone might see this), maintaining a changelog (past-me shipped things, future-me should too), and treating each project like a lab experiment rather than a finished product. <em>Experiments are allowed to be incomplete. Products feel like they have to be done.</em></p>`},
+    {num:'#003',date:'Dec 2025',tag:'Design',title:'Dark mode is not an aesthetic, it\'s respect',body:`<p>If your app doesn't support dark mode in 2026, you've made a deliberate choice to prioritize your design preferences over your users' comfort.</p><p>Screens at night. Screens in dark rooms. Screens at desks under overhead lights. This is where most of your app's actual usage happens. Bright white interfaces in these contexts cause eye strain, disrupt sleep, and make extended use uncomfortable.</p><p><strong>Dark mode is an accessibility feature before it's an aesthetic choice.</strong> The fact that it also looks better is a bonus, not the point.</p><p>The lab runs on dark mode because it respects the people who use it. Every interface I build defaults dark. Light mode exists as an option, not the default.</p>`},
+    {num:'#002',date:'Nov 2025',tag:'Photo',title:'Toronto\'s grid as a design system',body:`<p>Walk downtown Toronto and you're inside a design system. The streets form a grid. The blocks define modules. Buildings are components. Light creates hierarchy — brighter surfaces draw the eye, shadows establish depth.</p><p>Urban planners and UI designers solve the same problem: <strong>how do you organize chaos so humans can navigate it?</strong> How do you make something complex feel comprehensible?</p><p>The grid is the answer in both domains. A consistent underlying structure that you break only when you have a reason to. The variance creates meaning — if everything follows the grid, the thing that breaks it becomes significant.</p><p><em>Shooting architecture in Toronto is studying design at scale.</em> Every building is a UI decision made in concrete and glass. Some of them are good. Most of them are informative.</p>`},
+    {num:'#001',date:'Oct 2025',tag:'Life',title:'Why I started a lab instead of a portfolio',body:`<p>A portfolio says: look at what I've finished. A lab says: <strong>look at what I'm doing</strong>. The first is a retrospective. The second is a process.</p><p>I care more about building than about having built. The interesting part is the problem — the architecture decision, the design constraint, the 2am breakthrough. The finished thing is just evidence that the interesting part happened.</p><p>Labs also give you permission to experiment. Nothing in a lab has to be the definitive version of anything. You can build a thing, learn from it, and build a better version without the first version being a failure.</p><p><em>The portfolio mindset makes you cautious. The lab mindset makes you prolific.</em> I'd rather have 11 experiments than 3 perfect finished pieces. The experiments teach more.</p>`}
+  ];
+
+  function openNote(i){
+    const n=notes[i];
+    document.getElementById('readerContent').innerHTML=`<div class="reader-tag">// ${n.tag} · ${n.date}</div><div class="reader-title">${n.title}</div><div class="reader-meta">${n.num} · Lab note · thealxlabs.ca</div><div class="reader-body">${n.body}</div>`;
+    document.getElementById('noteReader').classList.add('open');
+    document.getElementById('noteReader').scrollTop=0;
+    document.body.style.overflow='hidden';
+  }
+  function closeNote(){document.getElementById('noteReader').classList.remove('open');document.body.style.overflow='';}
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeNote();});
+
+  function filterNotes(tag,el){
+    document.querySelectorAll('.tag-cloud-item').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.note-card').forEach((card,i)=>{
+      if(tag==='all'){card.style.display='block';return;}
+      const cardTag=notes[i]?.tag?.toLowerCase()||'';
+      card.style.display=cardTag===tag?'block':'none';
+    });
+  }
+</script>
+</body>
+</html>

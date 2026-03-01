@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>thealxlabs — uses</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0a0a;--fg:#f0f0f0;--accent:#ff3c00;--accent2:#00ffcc;--accent3:#ffe600;--border:rgba(255,255,255,0.08);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--fg);font-family:'Space Mono',monospace;min-height:100vh;overflow-x:hidden;cursor:crosshair;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:40px 40px;z-index:0;pointer-events:none;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+  .topbar-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:56px;}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.08em;color:var(--fg);text-decoration:none;}
+  .logo span{color:var(--accent);}
+  .nav-right{display:flex;gap:6px;align-items:center;}
+  .nav-links{display:flex;gap:2px;margin-right:4px;}
+  .nav-links a{color:rgba(255,255,255,0.38);text-decoration:none;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:6px 11px;transition:all 0.2s;border:1px solid transparent;}
+  .nav-links a:hover,.nav-links a.active{color:var(--accent2);border-color:rgba(0,255,204,0.2);}
+  .nav-divider{width:1px;height:20px;background:var(--border);margin:0 4px;}
+  .status-pill{display:flex;align-items:center;gap:6px;font-size:0.57rem;color:var(--accent2);border:1px solid rgba(0,255,204,0.2);padding:5px 10px;background:rgba(0,255,204,0.04);}
+  .status-dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite;}
+  .live-clock{font-size:0.57rem;color:rgba(255,255,255,0.26);}
+  .social-pill{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.36);text-decoration:none;font-size:0.61rem;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--border);padding:5px 10px;transition:all 0.2s;}
+  .social-pill:hover{color:var(--fg);border-color:var(--accent2);}
+  .container{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 24px;}
+  .cursor-glow{position:fixed;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(255,60,0,0.05) 0%,transparent 70%);pointer-events:none;transform:translate(-50%,-50%);z-index:0;left:-999px;top:-999px;}
+
+  .fade-up{opacity:0;transform:translateY(18px);animation:fadeUp 0.55s forwards;}
+  .d1{animation-delay:0.05s;}.d2{animation-delay:0.15s;}.d3{animation-delay:0.28s;}
+
+  .page-header{padding:60px 0 50px;position:relative;}
+  .page-tag{display:inline-block;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:3px 9px;margin-bottom:18px;}
+  .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,8vw,7rem);line-height:0.9;margin-bottom:16px;}
+  .page-title .outline{color:transparent;-webkit-text-stroke:1.5px var(--accent);}
+  .page-desc{font-size:0.78rem;color:rgba(255,255,255,0.42);line-height:1.8;max-width:500px;}
+  .page-deco{position:absolute;right:0;top:40px;font-family:'Bebas Neue',sans-serif;font-size:8rem;opacity:0.04;pointer-events:none;animation:float 6s ease-in-out infinite;}
+
+  /* USES LAYOUT */
+  .uses-layout{display:grid;grid-template-columns:200px 1fr;gap:2px;align-items:start;}
+  @media(max-width:700px){.uses-layout{grid-template-columns:1fr;}}
+
+  .uses-nav{position:sticky;top:72px;}
+  .uses-nav-item{display:block;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;padding:10px 14px;color:rgba(255,255,255,0.3);text-decoration:none;border-left:2px solid transparent;transition:all 0.2s;cursor:pointer;}
+  .uses-nav-item:hover,.uses-nav-item.active{color:var(--accent2);border-left-color:var(--accent2);background:rgba(0,255,204,0.03);}
+
+  .uses-sections{display:flex;flex-direction:column;gap:2px;}
+
+  .uses-section{border:1px solid var(--border);background:rgba(255,255,255,0.015);}
+  .uses-section-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;}
+  .uses-section-header:hover{background:rgba(255,255,255,0.02);}
+  .uses-section-icon{font-size:1.2rem;}
+  .uses-section-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.05em;}
+  .uses-section-count{font-size:0.55rem;color:rgba(255,255,255,0.24);letter-spacing:0.1em;margin-left:auto;}
+  .uses-items{padding:0;}
+
+  .use-item{display:grid;grid-template-columns:1fr auto;gap:16px;padding:18px 24px;border-bottom:1px solid var(--border);align-items:start;transition:background 0.2s;}
+  .use-item:last-child{border-bottom:none;}
+  .use-item:hover{background:rgba(255,255,255,0.02);}
+  .use-name{font-size:0.78rem;font-weight:700;margin-bottom:4px;color:var(--fg);}
+  .use-desc{font-size:0.66rem;line-height:1.65;color:rgba(255,255,255,0.36);}
+  .use-badge{font-size:0.5rem;letter-spacing:0.12em;text-transform:uppercase;border:1px solid;padding:2px 7px;white-space:nowrap;align-self:start;margin-top:2px;}
+  .badge-fav{color:var(--accent3);border-color:rgba(255,230,0,0.3);background:rgba(255,230,0,0.05);}
+  .badge-daily{color:var(--accent2);border-color:rgba(0,255,204,0.3);background:rgba(0,255,204,0.05);}
+  .badge-new{color:var(--accent);border-color:rgba(255,60,0,0.3);background:rgba(255,60,0,0.05);}
+  .badge-free{color:rgba(255,255,255,0.4);border-color:rgba(255,255,255,0.12);}
+
+  .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);margin:48px 0;}
+
+  footer{border-top:1px solid var(--border);padding:34px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-top:60px;}
+  .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:rgba(255,255,255,0.15);letter-spacing:0.1em;}
+  .footer-links{display:flex;gap:16px;}
+  .footer-links a{font-size:0.57rem;color:rgba(255,255,255,0.24);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+  .footer-links a:hover{color:var(--accent2);}
+  .footer-copy{font-size:0.57rem;color:rgba(255,255,255,0.15);}
+  @media(max-width:700px){.nav-links{display:none;}.uses-nav{display:none;}}
+</style>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.ico">
+</head>
+<body>
+<div class="cursor-glow" id="glow"></div>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="/" class="logo">the<span>alx</span>labs ⚗️</a>
+    <div class="nav-right">
+      <nav class="nav-links">
+        <a href="/">Home</a><a href="/projects">Projects</a><a href="/photos">Photos</a><a href="/about">About</a><a href="/uses" class="active">Uses</a><a href="/notes">Notes</a><a href="/stack">Stack</a><a href="/contact">Contact</a>
+        <a href="/guestbook">Guestbook</a>
+      </nav>
+      <div class="nav-divider"></div>
+      <div class="status-pill"><div class="status-dot"></div><span class="live-clock" id="clock"></span></div>
+      <a href="https://github.com/thealxlabs" target="_blank" class="social-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>GitHub</a>
+      <a href="https://twitter.com/thealxlabs" target="_blank" class="social-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Twitter</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="page-header">
+    <div class="page-deco">⚙️</div>
+    <div class="page-tag fade-up d1">// The full setup</div>
+    <div class="page-title fade-up d2">USES<br/><span class="outline">&amp; GEAR.</span></div>
+    <p class="page-desc fade-up d3">Everything I use to build, shoot, and think. Hardware, software, desk, camera. Updated whenever something changes.</p>
+  </div>
+
+  <div class="uses-layout">
+    <div class="uses-nav">
+      <a class="uses-nav-item active" href="#hardware">Hardware</a>
+      <a class="uses-nav-item" href="#software">Software</a>
+      <a class="uses-nav-item" href="#coding">Coding Tools</a>
+      <a class="uses-nav-item" href="#camera">Camera</a>
+      <a class="uses-nav-item" href="#desk">Desk Setup</a>
+      <a class="uses-nav-item" href="#services">Services</a>
+    </div>
+
+    <div class="uses-sections">
+
+      <div class="uses-section" id="hardware">
+        <div class="uses-section-header"><span class="uses-section-icon">💻</span><span class="uses-section-title">Hardware</span><span class="uses-section-count">5 items</span></div>
+        <div class="uses-items">
+          <div class="use-item"><div><div class="use-name">MacBook Pro</div><div class="use-desc">The main machine. Does everything without complaint. Dark mode always, display brightness at 60%.</div></div><span class="use-badge badge-daily">Daily Driver</span></div>
+          <div class="use-item"><div><div class="use-name">External Monitor</div><div class="use-desc">Extra screen real estate for when the code gets big. Positioned portrait mode for reading docs.</div></div><span class="use-badge badge-daily">Daily</span></div>
+          <div class="use-item"><div><div class="use-name">Mechanical Keyboard</div><div class="use-desc">Tactile switches. The click is important. It tells your brain something is happening.</div></div><span class="use-badge badge-fav">Favourite</span></div>
+          <div class="use-item"><div><div class="use-name">Magic Trackpad</div><div class="use-desc">Gestures are genuinely good. No mouse needed when the trackpad is this well-designed.</div></div><span class="use-badge badge-daily">Daily</span></div>
+          <div class="use-item"><div><div class="use-name">Sony WH-1000XM4</div><div class="use-desc">Noise cancellation for when the city gets loud. Required for deep work sessions.</div></div><span class="use-badge badge-fav">Can't live without</span></div>
+        </div>
+      </div>
+
+      <div class="uses-section" id="software">
+        <div class="uses-section-header"><span class="uses-section-icon">🖥️</span><span class="uses-section-title">Software</span><span class="uses-section-count">6 items</span></div>
+        <div class="uses-items">
+          <div class="use-item"><div><div class="use-name">VS Code</div><div class="use-desc">Default editor. Dark theme, custom font, all the extensions. It's not glamorous but it works.</div></div><span class="use-badge badge-daily">Daily</span></div>
+          <div class="use-item"><div><div class="use-name">Figma</div><div class="use-desc">Design tool of choice. Where everything starts before it becomes code. Auto Layout is a gift.</div></div><span class="use-badge badge-fav">Favourite</span></div>
+          <div class="use-item"><div><div class="use-name">Arc Browser</div><div class="use-desc">The only browser that doesn't feel like a compromise. Spaces for organizing work. Tabs hidden away.</div></div><span class="use-badge badge-new">Recent switch</span></div>
+          <div class="use-item"><div><div class="use-name">Raycast</div><div class="use-desc">Spotlight but actually good. Calculator, clipboard history, window management — all from one shortcut.</div></div><span class="use-badge badge-fav">Essential</span></div>
+          <div class="use-item"><div><div class="use-name">Warp Terminal</div><div class="use-desc">Modern terminal that understands what you're doing. Command history with context. Actually helpful.</div></div><span class="use-badge badge-new">New</span></div>
+          <div class="use-item"><div><div class="use-name">Obsidian</div><div class="use-desc">Where thoughts go before they become projects. Linked notes, no cloud sync, full ownership.</div></div><span class="use-badge badge-daily">Daily</span></div>
+        </div>
+      </div>
+
+      <div class="uses-section" id="coding">
+        <div class="uses-section-header"><span class="uses-section-icon">⚡</span><span class="uses-section-title">Coding Tools</span><span class="uses-section-count">5 items</span></div>
+        <div class="uses-items">
+          <div class="use-item"><div><div class="use-name">Vercel</div><div class="use-desc">Where everything ships. Git push to deploy. Preview URLs for every branch. Free tier is generous.</div></div><span class="use-badge badge-fav">Always</span></div>
+          <div class="use-item"><div><div class="use-name">GitHub</div><div class="use-desc">Version control, issues, actions. The whole pipeline lives here. Commit often, commit descriptively.</div></div><span class="use-badge badge-daily">Daily</span></div>
+          <div class="use-item"><div><div class="use-name">Supabase</div><div class="use-desc">Backend when I need one. Postgres, auth, storage — all in one dashboard. Open source too.</div></div><span class="use-badge badge-free">Free Tier</span></div>
+          <div class="use-item"><div><div class="use-name">Tailwind CSS</div><div class="use-desc">Utility classes that compile to nothing unused. Fast to write, easy to read, zero custom CSS needed.</div></div><span class="use-badge badge-daily">Daily</span></div>
+          <div class="use-item"><div><div class="use-name">pnpm</div><div class="use-desc">Faster npm. Uses symlinks, saves disk space, installs in half the time. Hard to go back.</div></div><span class="use-badge badge-fav">Switched</span></div>
+        </div>
+      </div>
+
+      <div class="uses-section" id="camera">
+        <div class="uses-section-header"><span class="uses-section-icon">📷</span><span class="uses-section-title">Camera Gear</span><span class="uses-section-count">4 items</span></div>
+        <div class="uses-items">
+          <div class="use-item"><div><div class="use-name">Nikon D3200</div><div class="use-desc">24.2MP APS-C sensor. Got it used, never looked back. Not the newest but it captures exactly what I see.</div></div><span class="use-badge badge-fav">Main body</span></div>
+          <div class="use-item"><div><div class="use-name">55mm f/1.8 Prime</div><div class="use-desc">The only lens I need. 55mm on APS-C is close to what your eyes actually see. Prime means you move your feet.</div></div><span class="use-badge badge-fav">Always on</span></div>
+          <div class="use-item"><div><div class="use-name">Peak Design Strap</div><div class="use-desc">The strap that ships with cameras is an insult. This one clicks in and out in a second. Worth every cent.</div></div><span class="use-badge badge-daily">Daily</span></div>
+          <div class="use-item"><div><div class="use-name">Lightroom Classic</div><div class="use-desc">Post-processing. Minimal adjustments — the goal is to capture it right, not fix it after. But exposure correction is real.</div></div><span class="use-badge badge-daily">When needed</span></div>
+        </div>
+      </div>
+
+      <div class="uses-section" id="desk">
+        <div class="uses-section-header"><span class="uses-section-icon">🪑</span><span class="uses-section-title">Desk Setup</span><span class="uses-section-count">4 items</span></div>
+        <div class="uses-items">
+          <div class="use-item"><div><div class="use-name">Standing Desk</div><div class="use-desc">Motor-driven. Programmed heights for sit and stand. Sit more than I should, stand when the code isn't working.</div></div><span class="use-badge badge-daily">Daily</span></div>
+          <div class="use-item"><div><div class="use-name">Desk Mat</div><div class="use-desc">Oversized, dark. Covers the entire surface. Makes the desk feel intentional instead of accidental.</div></div><span class="use-badge badge-fav">Underrated</span></div>
+          <div class="use-item"><div><div class="use-name">Desk Lamp</div><div class="use-desc">Warm light, positioned to the side. Screen glare is a productivity killer. Good lighting is not negotiable.</div></div><span class="use-badge badge-daily">Daily</span></div>
+          <div class="use-item"><div><div class="use-name">Cable Management</div><div class="use-desc">Velcro ties, cable routing under the desk. A clean desk is a clear mind. 45 minutes of setup, infinite peace.</div></div><span class="use-badge badge-fav">One-time fix</span></div>
+        </div>
+      </div>
+
+      <div class="uses-section" id="services">
+        <div class="uses-section-header"><span class="uses-section-icon">🌐</span><span class="uses-section-title">Services</span><span class="uses-section-count">4 items</span></div>
+        <div class="uses-items">
+          <div class="use-item"><div><div class="use-name">thealxlabs.ca</div><div class="use-desc">The .ca domain for the lab. Canadian TLD because Toronto is home. All subdomains live here.</div></div><span class="use-badge badge-fav">Home base</span></div>
+          <div class="use-item"><div><div class="use-name">Vercel (Pro)</div><div class="use-desc">Hosting for everything. Analytics, edge functions, custom domains — worth the monthly cost for the speed alone.</div></div><span class="use-badge badge-daily">Every project</span></div>
+          <div class="use-item"><div><div class="use-name">Spotify</div><div class="use-desc">Essential. Lo-fi for focus, drum and bass when the deadline is close. The playlist changes, the headphones don't come off.</div></div><span class="use-badge badge-daily">Always on</span></div>
+          <div class="use-item"><div><div class="use-name">1Password</div><div class="use-desc">Password manager. Every password is unique and random. Security hygiene is non-negotiable once you've been burned.</div></div><span class="use-badge badge-fav">Essential</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">THEALXLABS</div>
+    <div class="footer-links"><a href="/">Home</a><a href="/projects">Projects</a><a href="/about">About</a><a href="/contact">Contact</a></div>
+    <div class="footer-copy">© 2026 thealxlabs.ca 🇨🇦</div>
+  </footer>
+</div>
+
+<script>
+  document.addEventListener('mousemove',e=>{const g=document.getElementById('glow');if(g){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';}});
+  (function(){const trail=[];for(let i=0;i<12;i++){const d=document.createElement('div');d.style.cssText='position:fixed;width:6px;height:6px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:9999;opacity:0;transition:opacity 0.3s;transform:translate(-50%,-50%)';document.body.appendChild(d);trail.push({el:d,x:0,y:0});}let mx=0,my=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});setInterval(()=>{let lx=mx,ly=my;trail.forEach((t,i)=>{const ox=lx,oy=ly;t.el.style.left=t.x+'px';t.el.style.top=t.y+'px';t.el.style.opacity=String((12-i)/24);lx=t.x;ly=t.y;t.x+=(ox-t.x)*0.35;t.y+=(oy-t.y)*0.35;});},16);})();
+  const logo=document.querySelector('.logo');if(logo)logo.addEventListener('mouseenter',()=>{logo.style.transform=`skewX(${(Math.random()-0.5)*6}deg)`;setTimeout(()=>logo.style.transform='',150);});
+  function tick(){const el=document.getElementById('clock');if(el)el.textContent=new Date().toLocaleTimeString('en-CA',{timeZone:'America/Toronto',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+' ET';}tick();setInterval(tick,1000);
+  (function(){let buf='';document.addEventListener('keydown',e=>{buf=(buf+e.key).slice(-3).toUpperCase();if(buf==='ALX'){buf='';const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0a0a;cursor:pointer;';o.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:clamp(4rem,15vw,12rem);color:#ff3c00;animation:glitch 0.3s infinite;line-height:0.9;text-align:center">THE<br/>ALX<br/>LABS</div><div style="font-family:Space Mono,monospace;font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:24px;letter-spacing:0.2em">// YOU FOUND THE EASTER EGG. CLICK TO ESCAPE.</div><style>@keyframes glitch{0%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}33%{text-shadow:-3px 0 #ffe600,3px 0 #00ffcc;}66%{text-shadow:3px 2px #ff3c00,-3px -2px #00ffcc;}100%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}}</style>';document.body.appendChild(o);o.addEventListener('click',()=>o.remove());}});})();
+  // sticky nav highlight
+  const navItems=document.querySelectorAll('.uses-nav-item');
+  const sections=document.querySelectorAll('.uses-section');
+  window.addEventListener('scroll',()=>{let current='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-100)current=s.id;});navItems.forEach(n=>{n.classList.toggle('active',n.getAttribute('href')==='#'+current);});});
+</script>
+</body>
+</html>

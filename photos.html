@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>thealxlabs — photos</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0a0a;--fg:#f0f0f0;--accent:#ff3c00;--accent2:#00ffcc;--accent3:#ffe600;--border:rgba(255,255,255,0.08);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--fg);font-family:'Space Mono',monospace;min-height:100vh;overflow-x:hidden;cursor:crosshair;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:40px 40px;z-index:0;pointer-events:none;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+  @keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
+
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+  .topbar-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:56px;}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.08em;color:var(--fg);text-decoration:none;}
+  .logo span{color:var(--accent);}
+  .nav-right{display:flex;gap:6px;align-items:center;}
+  .nav-links{display:flex;gap:2px;margin-right:4px;}
+  .nav-links a{color:rgba(255,255,255,0.38);text-decoration:none;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:6px 11px;transition:all 0.2s;border:1px solid transparent;}
+  .nav-links a:hover,.nav-links a.active{color:var(--accent2);border-color:rgba(0,255,204,0.2);}
+  .nav-divider{width:1px;height:20px;background:var(--border);margin:0 4px;}
+  .status-pill{display:flex;align-items:center;gap:6px;font-size:0.57rem;color:var(--accent2);border:1px solid rgba(0,255,204,0.2);padding:5px 10px;background:rgba(0,255,204,0.04);}
+  .status-dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite;}
+  .live-clock{font-size:0.57rem;color:rgba(255,255,255,0.26);}
+  .social-pill{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.36);text-decoration:none;font-size:0.61rem;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--border);padding:5px 10px;transition:all 0.2s;}
+  .social-pill:hover{color:var(--fg);border-color:var(--accent2);}
+  .container{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 24px;}
+  .cursor-glow{position:fixed;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(255,230,0,0.05) 0%,transparent 70%);pointer-events:none;transform:translate(-50%,-50%);z-index:0;left:-999px;top:-999px;}
+
+  .fade-up{opacity:0;transform:translateY(18px);animation:fadeUp 0.55s forwards;}
+  .d1{animation-delay:0.05s;}.d2{animation-delay:0.15s;}.d3{animation-delay:0.28s;}
+
+  .page-header{padding:60px 0 50px;position:relative;}
+  .page-tag{display:inline-block;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent3);border:1px solid var(--accent3);padding:3px 9px;margin-bottom:18px;}
+  .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,8vw,7rem);line-height:0.9;margin-bottom:16px;}
+  .page-title .outline{color:transparent;-webkit-text-stroke:1.5px var(--accent3);}
+  .page-desc{font-size:0.78rem;color:rgba(255,255,255,0.42);line-height:1.8;max-width:500px;}
+  .page-deco{position:absolute;right:0;top:40px;font-family:'Bebas Neue',sans-serif;font-size:8rem;opacity:0.04;pointer-events:none;animation:float 6s ease-in-out infinite;}
+
+  /* GEAR BAR */
+  .gear-bar{display:flex;gap:2px;margin-bottom:40px;flex-wrap:wrap;}
+  .gear-item{border:1px solid var(--border);padding:10px 16px;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.36);background:rgba(255,255,255,0.015);}
+  .gear-item span{color:var(--accent3);}
+
+  /* FILTER */
+  .filter-bar{display:flex;gap:2px;margin-bottom:28px;flex-wrap:wrap;}
+  .filter-btn{font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;background:none;border:1px solid var(--border);color:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.18s;}
+  .filter-btn.active{background:var(--accent3);color:#000;border-color:var(--accent3);}
+  .filter-btn:not(.active):hover{color:var(--accent3);border-color:rgba(255,230,0,0.3);}
+
+  /* MASONRY PHOTO GRID */
+  .photo-grid{columns:3;column-gap:2px;margin-bottom:60px;}
+  @media(max-width:800px){.photo-grid{columns:2;}}
+  @media(max-width:500px){.photo-grid{columns:1;}}
+
+  .photo-item{break-inside:avoid;margin-bottom:2px;position:relative;overflow:hidden;cursor:pointer;display:block;}
+  .photo-item.hidden{display:none;}
+  .photo-placeholder{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);position:relative;overflow:hidden;transition:all 0.3s;}
+  .photo-placeholder::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.03),transparent);background-size:200% 100%;animation:shimmer 2s infinite;}
+  .photo-item:hover .photo-placeholder{border-color:var(--accent3);transform:scale(1.01);}
+
+  /* Fake photo placeholder with abstract geometry - Toronto urban grid vibes */
+  .ph-tall{padding-bottom:140%;}
+  .ph-wide{padding-bottom:65%;}
+  .ph-square{padding-bottom:100%;}
+
+  .photo-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 50%);opacity:0;transition:opacity 0.3s;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;}
+  .photo-item:hover .photo-overlay{opacity:1;}
+  .photo-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.05em;margin-bottom:3px;}
+  .photo-meta{font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);}
+
+  /* Abstract SVG patterns inside placeholders */
+  .photo-art{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.15;}
+
+  /* LIGHTBOX */
+  .lightbox{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+  .lightbox.open{opacity:1;pointer-events:all;}
+  .lb-inner{position:relative;max-width:800px;width:90%;text-align:center;}
+  .lb-close{position:absolute;top:-40px;right:0;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4);cursor:pointer;background:none;border:1px solid var(--border);padding:5px 12px;font-family:'Space Mono',monospace;}
+  .lb-close:hover{color:var(--accent);border-color:var(--accent);}
+  .lb-img{width:100%;border:1px solid var(--border);}
+  .lb-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;margin-top:16px;}
+  .lb-info{font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:0.1em;margin-top:6px;}
+
+  /* INSTAGRAM CTA */
+  .insta-cta{border:1px solid var(--border);padding:40px;background:rgba(255,230,0,0.02);text-align:center;position:relative;overflow:hidden;}
+  .insta-cta::before{content:'📷';position:absolute;font-size:6rem;opacity:0.06;top:50%;left:50%;transform:translate(-50%,-50%);}
+  .insta-cta h3{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;margin-bottom:10px;}
+  .insta-cta p{font-size:0.75rem;color:rgba(255,255,255,0.38);margin-bottom:22px;max-width:400px;margin-left:auto;margin-right:auto;line-height:1.8;}
+  .btn{font-family:'Space Mono',monospace;font-size:0.71rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:13px 24px;transition:all 0.15s;display:inline-flex;align-items:center;gap:7px;}
+  .btn-yellow{background:var(--accent3);color:#000;}
+  .btn-yellow:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 rgba(255,230,0,0.3);}
+
+  footer{border-top:1px solid var(--border);padding:34px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-top:60px;}
+  .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:rgba(255,255,255,0.15);letter-spacing:0.1em;}
+  .footer-links{display:flex;gap:16px;}
+  .footer-links a{font-size:0.57rem;color:rgba(255,255,255,0.24);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+  .footer-links a:hover{color:var(--accent2);}
+  .footer-copy{font-size:0.57rem;color:rgba(255,255,255,0.15);}
+  @media(max-width:700px){.nav-links{display:none;}}
+</style>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.ico">
+</head>
+<body>
+<div class="cursor-glow" id="glow"></div>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="/" class="logo">the<span>alx</span>labs ⚗️</a>
+    <div class="nav-right">
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/projects">Projects</a>
+        <a href="/photos" class="active">Photos</a>
+        <a href="/about">About</a>
+        <a href="/uses">Uses</a>
+        <a href="/notes">Notes</a>
+        <a href="/stack">Stack</a>
+        <a href="/contact">Contact</a>
+        <a href="/guestbook">Guestbook</a>
+      </nav>
+      <div class="nav-divider"></div>
+      <div class="status-pill"><div class="status-dot"></div><span class="live-clock" id="clock"></span></div>
+      <a href="https://github.com/thealxlabs" target="_blank" class="social-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>GitHub</a>
+      <a href="https://twitter.com/thealxlabs" target="_blank" class="social-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Twitter</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="page-header">
+    <div class="page-deco">📷</div>
+    <div class="page-tag fade-up d1">// Nikon D3200 · 55mm Prime · Toronto</div>
+    <div class="page-title fade-up d2">THE<br/><span class="outline">GRID.</span></div>
+    <p class="page-desc fade-up d3">Architectural street photography. Documenting Toronto's structural geometry through manual optics — the concrete, the light, the lines that make the city a system.</p>
+  </div>
+
+  <div class="gear-bar">
+    <div class="gear-item">Body: <span>Nikon D3200</span></div>
+    <div class="gear-item">Lens: <span>55mm f/1.8 Prime</span></div>
+    <div class="gear-item">Mode: <span>Manual</span></div>
+    <div class="gear-item">Subject: <span>Urban / Architecture</span></div>
+    <div class="gear-item">City: <span>Toronto, CA</span></div>
+    <div class="gear-item">Instagram: <span>@alexedgraphy</span></div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterPhotos('all',this)">All</button>
+    <button class="filter-btn" onclick="filterPhotos('architecture',this)">Architecture</button>
+    <button class="filter-btn" onclick="filterPhotos('street',this)">Street</button>
+    <button class="filter-btn" onclick="filterPhotos('light',this)">Light & Shadow</button>
+    <button class="filter-btn" onclick="filterPhotos('geometry',this)">Geometry</button>
+  </div>
+
+  <div class="photo-grid" id="photoGrid">
+    <!-- Row 1 -->
+    <div class="photo-item" data-cat="architecture" onclick="openLight(0)">
+      <div class="photo-placeholder ph-tall">
+        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 280"><rect x="20" y="40" width="30" height="220" fill="none" stroke="white" stroke-width="1"/><rect x="60" y="20" width="30" height="240" fill="none" stroke="white" stroke-width="1"/><rect x="100" y="60" width="30" height="200" fill="none" stroke="white" stroke-width="1"/><rect x="140" y="10" width="30" height="250" fill="none" stroke="white" stroke-width="1"/><line x1="0" y1="260" x2="200" y2="260" stroke="rgba(255,230,0,0.5)" stroke-width="1"/></svg></div>
+        <div class="photo-overlay"><div class="photo-title">Financial District, 6AM</div><div class="photo-meta">Architecture · f/8 · 1/250s</div></div>
+      </div>
+    </div>
+    <div class="photo-item" data-cat="geometry" onclick="openLight(1)">
+      <div class="photo-placeholder ph-square">
+        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 200"><polygon points="100,10 190,190 10,190" fill="none" stroke="white" stroke-width="1"/><polygon points="100,50 160,170 40,170" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1"/><polygon points="100,90 130,150 70,150" fill="none" stroke="rgba(0,255,204,0.5)" stroke-width="1"/></svg></div>
+        <div class="photo-overlay"><div class="photo-title">Triangulation</div><div class="photo-meta">Geometry · f/5.6 · 1/500s</div></div>
+      </div>
+    </div>
+    <div class="photo-item" data-cat="light" onclick="openLight(2)">
+      <div class="photo-placeholder ph-wide">
+        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 130"><line x1="0" y1="65" x2="200" y2="65" stroke="rgba(255,230,0,0.6)" stroke-width="1"/><line x1="100" y1="0" x2="100" y2="130" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><circle cx="100" cy="65" r="40" fill="none" stroke="rgba(255,60,0,0.4)" stroke-width="1"/><circle cx="100" cy="65" r="20" fill="none" stroke="rgba(255,60,0,0.2)" stroke-width="1"/></svg></div>
+        <div class="photo-overlay"><div class="photo-title">Union Station, Noon</div><div class="photo-meta">Light · f/11 · 1/1000s</div></div>
+      </div>
+    </div>
+    <!-- Row 2 -->
+    <div class="photo-item" data-cat="street" onclick="openLight(3)">
+      <div class="photo-placeholder ph-wide">
+        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 130"><rect x="0" y="60" width="200" height="2" fill="rgba(255,255,255,0.3)"/><rect x="0" y="70" width="200" height="1" fill="rgba(255,255,255,0.1)"/><rect x="90" y="0" width="3" height="130" fill="rgba(255,60,0,0.3)"/><rect x="110" y="0" width="1" height="130" fill="rgba(255,255,255,0.1)"/></svg></div>
+        <div class="photo-overlay"><div class="photo-title">King St. West</div><div class="photo-meta">Street · f/8 · 1/320s</div></div>
+      </div>
+    </div>
+    <div class="photo-item" data-cat="architecture" onclick="openLight(4)">
+      <div class="photo-placeholder ph-tall">
+        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 280"><rect x="70" y="0" width="60" height="280" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="80" y="20" width="10" height="15" fill="rgba(0,255,204,0.2)"/><rect x="95" y="20" width="10" height="15" fill="rgba(0,255,204,0.2)"/><rect x="110" y="20" width="10" height="15" fill="rgba(0,255,204,0.2)"/><rect x="80" y="45" width="10" height="15" fill="rgba(0,255,204,0.15)"/><rect x="95" y="45" width="10" height="15" fill="rgba(255,230,0,0.3)"/><rect x="110" y="45" width="10" height="15" fill="rgba(0,255,204,0.15)"/></svg></div>
+        <div class="photo-overlay"><div class="photo-title">Glass Tower, Dusk</div><div class="photo-meta">Architecture · f/4 · 1/60s</div></div>
+      </div>
+    </div>
+    <div class="photo-item" data-cat="geometry" onclick="openLight(5)">
+      <div class="photo-placeholder ph-square">
+        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 200"><rect x="10" y="10" width="180" height="180" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><rect x="40" y="40" width="120" height="120" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="70" y="70" width="60" height="60" fill="none" stroke="rgba(0,255,204,0.5)" stroke-width="1"/><rect x="90" y="90" width="20" height="20" fill="rgba(255,60,0,0.4)"/></svg></div>
+        <div class="photo-overlay"><div class="photo-title">Recursive Grid</div><div class="photo-meta">Geometry · f/16 · 1/125s</div></div>
+      </div>
+    </div>
+    <!-- Row 3 -->
+    <div class="photo-item" data-cat="light" onclick="openLight(6)">
+      <div class="photo-placeholder ph-tall">
+        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 280"><line x1="0" y1="0" x2="200" y2="280" stroke="rgba(255,230,0,0.4)" stroke-width="1"/><line x1="200" y1="0" x2="0" y2="280" stroke="rgba(255,230,0,0.2)" stroke-width="1"/><circle cx="100" cy="140" r="60" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg></div>
+        <div class="photo-overlay"><div class="photo-title">Morning Cut</div><div class="photo-meta">Light · f/2.8 · 1/2000s</div></div>
+      </div>
+    </div>
+    <div class="photo-item" data-cat="street" onclick="openLight(7)">
+      <div class="photo-placeholder ph-square">
+        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 200"><circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/><circle cx="100" cy="100" r="50" fill="none" stroke="rgba(255,60,0,0.3)" stroke-width="1"/><line x1="20" y1="100" x2="180" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="100" y1="20" x2="100" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="1"/></svg></div>
+        <div class="photo-overlay"><div class="photo-title">Yonge & Dundas</div><div class="photo-meta">Street · f/8 · 1/250s</div></div>
+      </div>
+    </div>
+    <div class="photo-item" data-cat="architecture" onclick="openLight(8)">
+      <div class="photo-placeholder ph-wide">
+        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 130"><rect x="0" y="40" width="200" height="50" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><rect x="20" y="50" width="20" height="30" fill="rgba(0,255,204,0.1)"/><rect x="50" y="50" width="20" height="30" fill="rgba(0,255,204,0.2)"/><rect x="80" y="50" width="20" height="30" fill="rgba(0,255,204,0.15)"/><rect x="110" y="50" width="20" height="30" fill="rgba(255,230,0,0.2)"/><rect x="140" y="50" width="20" height="30" fill="rgba(0,255,204,0.1)"/><rect x="170" y="50" width="20" height="30" fill="rgba(0,255,204,0.2)"/></svg></div>
+        <div class="photo-overlay"><div class="photo-title">Harbourfront Strip</div><div class="photo-meta">Architecture · f/11 · 1/500s</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insta-cta">
+    <h3>MORE ON INSTAGRAM</h3>
+    <p>These are placeholders — replace with your real shots. The full archive lives at @alexedgraphy. Every image shot on the D3200, manual, in Toronto.</p>
+    <a href="https://www.instagram.com/alexedgraphy" target="_blank" class="btn btn-yellow">↗ @alexedgraphy</a>
+  </div>
+
+  <footer>
+    <div class="footer-logo">THEALXLABS</div>
+    <div class="footer-links"><a href="/">Home</a><a href="/projects">Projects</a><a href="/about">About</a><a href="/contact">Contact</a></div>
+    <div class="footer-copy">© 2026 thealxlabs.ca 🇨🇦</div>
+  </footer>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLight()">
+  <div class="lb-inner" onclick="e=>e.stopPropagation()">
+    <button class="lb-close" onclick="closeLight()">✕ Close</button>
+    <div id="lbContent"></div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('mousemove',e=>{const g=document.getElementById('glow');if(g){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';}});
+  (function(){const trail=[];for(let i=0;i<12;i++){const d=document.createElement('div');d.style.cssText='position:fixed;width:6px;height:6px;border-radius:50%;background:var(--accent3);pointer-events:none;z-index:9999;opacity:0;transition:opacity 0.3s;transform:translate(-50%,-50%)';document.body.appendChild(d);trail.push({el:d,x:0,y:0});}let mx=0,my=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});setInterval(()=>{let lx=mx,ly=my;trail.forEach((t,i)=>{const ox=lx,oy=ly;t.el.style.left=t.x+'px';t.el.style.top=t.y+'px';t.el.style.opacity=String((12-i)/24);lx=t.x;ly=t.y;t.x+=(ox-t.x)*0.35;t.y+=(oy-t.y)*0.35;});},16);})();
+  const logo=document.querySelector('.logo');if(logo)logo.addEventListener('mouseenter',()=>{logo.style.transform=`skewX(${(Math.random()-0.5)*6}deg)`;setTimeout(()=>logo.style.transform='',150);});
+  function tick(){const el=document.getElementById('clock');if(el)el.textContent=new Date().toLocaleTimeString('en-CA',{timeZone:'America/Toronto',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+' ET';}tick();setInterval(tick,1000);
+  (function(){let buf='';document.addEventListener('keydown',e=>{buf=(buf+e.key).slice(-3).toUpperCase();if(buf==='ALX'){buf='';const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0a0a;cursor:pointer;';o.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:clamp(4rem,15vw,12rem);color:#ff3c00;animation:glitch 0.3s infinite;line-height:0.9;text-align:center">THE<br/>ALX<br/>LABS</div><div style="font-family:Space Mono,monospace;font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:24px;letter-spacing:0.2em">// YOU FOUND THE EASTER EGG. CLICK TO ESCAPE.</div><style>@keyframes glitch{0%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}33%{text-shadow:-3px 0 #ffe600,3px 0 #00ffcc;}66%{text-shadow:3px 2px #ff3c00,-3px -2px #00ffcc;}100%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}}</style>';document.body.appendChild(o);o.addEventListener('click',()=>o.remove());}});})();
+
+  const photos = [
+    {title:'Financial District, 6AM',meta:'Architecture · Nikon D3200 · 55mm · f/8 · 1/250s · ISO 200'},
+    {title:'Triangulation',meta:'Geometry · Nikon D3200 · 55mm · f/5.6 · 1/500s · ISO 400'},
+    {title:'Union Station, Noon',meta:'Light & Shadow · Nikon D3200 · 55mm · f/11 · 1/1000s · ISO 100'},
+    {title:'King St. West',meta:'Street · Nikon D3200 · 55mm · f/8 · 1/320s · ISO 200'},
+    {title:'Glass Tower, Dusk',meta:'Architecture · Nikon D3200 · 55mm · f/4 · 1/60s · ISO 800'},
+    {title:'Recursive Grid',meta:'Geometry · Nikon D3200 · 55mm · f/16 · 1/125s · ISO 200'},
+    {title:'Morning Cut',meta:'Light & Shadow · Nikon D3200 · 55mm · f/2.8 · 1/2000s · ISO 100'},
+    {title:'Yonge & Dundas',meta:'Street · Nikon D3200 · 55mm · f/8 · 1/250s · ISO 400'},
+    {title:'Harbourfront Strip',meta:'Architecture · Nikon D3200 · 55mm · f/11 · 1/500s · ISO 200'},
+  ];
+
+  function openLight(i){
+    const p = photos[i];
+    document.getElementById('lbContent').innerHTML = `<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:3rem;color:rgba(255,255,255,0.1)">PHOTO ${i+1}</div><div style="font-family:Bebas Neue,sans-serif;font-size:1.8rem;margin-top:16px">${p.title}</div><div style="font-size:0.62rem;color:rgba(255,255,255,0.35);letter-spacing:0.1em;margin-top:6px">${p.meta}</div>`;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLight(){document.getElementById('lightbox').classList.remove('open');}
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLight();});
+
+  function filterPhotos(cat, btn){
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.photo-item').forEach(item=>{
+      if(cat==='all'||item.dataset.cat===cat){item.classList.remove('hidden');}
+      else{item.classList.add('hidden');}
+    });
+  }
+</script>
+</body>
+</html>

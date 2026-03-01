@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>thealxlabs — projects</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0a0a;--fg:#f0f0f0;--accent:#ff3c00;--accent2:#00ffcc;--accent3:#ffe600;--border:rgba(255,255,255,0.08);}
+  *{margin:0;padding:0;box-sizing:border-box;} html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--fg);font-family:'Space Mono',monospace;min-height:100vh;overflow-x:hidden;cursor:crosshair;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:40px 40px;z-index:0;pointer-events:none;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+  @keyframes blink{50%{opacity:0;}}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-18px);}}
+
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+  .topbar-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:56px;}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.08em;color:var(--fg);text-decoration:none;}
+  .logo span{color:var(--accent);}
+  .nav-links{display:flex;gap:2px;}
+  .nav-links a{color:rgba(255,255,255,0.38);text-decoration:none;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:6px 11px;transition:all 0.2s;border:1px solid transparent;}
+  .nav-links a:hover,.nav-links a.active{color:var(--accent2);border-color:rgba(0,255,204,0.2);}
+  .nav-right{display:flex;gap:8px;align-items:center;}
+  .status-pill{display:flex;align-items:center;gap:6px;font-size:0.57rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent2);border:1px solid rgba(0,255,204,0.2);padding:5px 10px;background:rgba(0,255,204,0.04);}
+  .status-dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite;}
+  .live-clock{font-size:0.57rem;color:rgba(255,255,255,0.26);}
+  .social-pill{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.36);text-decoration:none;font-size:0.61rem;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--border);padding:5px 10px;transition:all 0.2s;}
+  .social-pill:hover{color:var(--fg);border-color:var(--accent2);}
+  .container{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  /* PAGE HEADER */
+  .page-header{padding:60px 0 50px;position:relative;}
+  .page-tag{display:inline-block;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:3px 9px;margin-bottom:18px;}
+  .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,8vw,7rem);line-height:0.9;margin-bottom:16px;}
+  .page-title .outline{color:transparent;-webkit-text-stroke:1.5px var(--accent);}
+  .page-desc{font-size:0.78rem;color:rgba(255,255,255,0.42);line-height:1.8;max-width:480px;}
+  .page-deco{position:absolute;right:0;top:40px;font-family:'Bebas Neue',sans-serif;font-size:8rem;opacity:0.04;pointer-events:none;user-select:none;animation:float 6s ease-in-out infinite;}
+
+  .fade-up{opacity:0;transform:translateY(18px);animation:fadeUp 0.55s forwards;}
+  .d1{animation-delay:0.05s;}.d2{animation-delay:0.15s;}.d3{animation-delay:0.28s;}
+
+  /* TABS */
+  .tab-bar{display:flex;border:1px solid var(--border);margin-bottom:28px;width:fit-content;}
+  .tab-btn{font-family:'Space Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:10px 20px;background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.18s;border-right:1px solid var(--border);display:flex;align-items:center;gap:6px;}
+  .tab-btn:last-child{border-right:none;}
+  .tab-btn.active{background:var(--accent);color:#fff;}
+  .tab-btn:not(.active):hover{color:var(--fg);background:rgba(255,255,255,0.04);}
+  .tab-count{font-size:0.5rem;background:rgba(255,255,255,0.1);padding:1px 5px;}
+  .tab-btn.active .tab-count{background:rgba(255,255,255,0.22);}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+
+  /* CARDS */
+  .projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;}
+  .project-card{position:relative;border:1px solid rgba(255,255,255,0.07);padding:26px;text-decoration:none;color:var(--fg);background:rgba(255,255,255,0.015);transition:all 0.18s;overflow:hidden;display:block;}
+  .project-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,60,0,0.06),transparent);opacity:0;transition:opacity 0.3s;}
+  .project-card:hover::before{opacity:1;}
+  .project-card:hover{border-color:rgba(255,60,0,0.35);transform:translate(-2px,-2px);box-shadow:4px 4px 0 rgba(255,60,0,0.14);}
+  .project-card.hosted{background:rgba(0,255,204,0.02);}
+  .project-card.hosted::before{background:linear-gradient(135deg,rgba(0,255,204,0.05),transparent);}
+  .project-card.hosted:hover{border-color:rgba(0,255,204,0.3);box-shadow:4px 4px 0 rgba(0,255,204,0.1);}
+  .project-card.hosted .card-arrow{color:var(--accent2);}
+  .card-label{font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent2);margin-bottom:9px;}
+  .card-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.04em;margin-bottom:8px;}
+  .card-desc{font-size:0.68rem;line-height:1.7;color:rgba(255,255,255,0.38);}
+  .card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:16px;}
+  .card-tag{font-size:0.5rem;letter-spacing:0.15em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.1);padding:2px 6px;color:rgba(255,255,255,0.24);}
+  .card-arrow{font-size:1rem;opacity:0;transform:translate(-4px,4px);transition:all 0.18s;color:var(--accent);}
+  .project-card:hover .card-arrow{opacity:1;transform:translate(0,0);}
+  .card-url{font-size:0.54rem;color:rgba(255,255,255,0.17);margin-top:5px;}
+  .project-card.wip{opacity:0.42;cursor:default;}
+  .project-card.wip:hover{transform:none;box-shadow:none;border-color:rgba(255,255,255,0.07);}
+  .card-wip{font-size:0.55rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent3);margin-bottom:9px;animation:blink 1.5s step-end infinite;}
+
+  .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);margin:60px 0;}
+
+  /* CHANGELOG */
+  .section-header{display:flex;align-items:baseline;gap:14px;margin-bottom:32px;flex-wrap:wrap;}
+  .section-title{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;letter-spacing:0.05em;}
+  .section-sub{font-size:0.62rem;color:var(--accent2);letter-spacing:0.1em;}
+  .changelog-list{display:flex;flex-direction:column;}
+  .changelog-item{display:grid;grid-template-columns:110px 1fr;gap:24px;padding:18px 0;border-bottom:1px solid var(--border);align-items:start;}
+  .changelog-item:first-child{border-top:1px solid var(--border);}
+  .changelog-date{font-size:0.59rem;color:rgba(255,255,255,0.22);letter-spacing:0.08em;padding-top:3px;}
+  .changelog-badge{display:inline-block;font-size:0.5rem;letter-spacing:0.15em;text-transform:uppercase;padding:2px 7px;margin-bottom:5px;border:1px solid;}
+  .badge-ship{color:var(--accent2);border-color:rgba(0,255,204,0.3);background:rgba(0,255,204,0.05);}
+  .badge-update{color:var(--accent3);border-color:rgba(255,230,0,0.3);background:rgba(255,230,0,0.05);}
+  .badge-new{color:var(--accent);border-color:rgba(255,60,0,0.3);background:rgba(255,60,0,0.05);}
+  .badge-fix{color:rgba(255,255,255,0.45);border-color:rgba(255,255,255,0.12);}
+  .changelog-title{font-size:0.77rem;font-weight:700;margin-bottom:3px;}
+  .changelog-desc{font-size:0.66rem;color:rgba(255,255,255,0.34);line-height:1.65;}
+
+  footer{border-top:1px solid var(--border);padding:34px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:rgba(255,255,255,0.15);letter-spacing:0.1em;}
+  .footer-links{display:flex;gap:16px;}
+  .footer-links a{font-size:0.57rem;color:rgba(255,255,255,0.24);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+  .footer-links a:hover{color:var(--accent2);}
+  .footer-copy{font-size:0.57rem;color:rgba(255,255,255,0.15);letter-spacing:0.08em;}
+  .cursor-glow{position:fixed;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(255,60,0,0.05) 0%,transparent 70%);pointer-events:none;transform:translate(-50%,-50%);z-index:0;left:-999px;top:-999px;}
+  @media(max-width:700px){.nav-links{display:none;}.tab-bar{flex-wrap:wrap;width:100%;}.tab-btn{flex:1 1 auto;justify-content:center;border-right:none;border-bottom:1px solid var(--border);}}
+</style>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.ico">
+</head>
+<body>
+<div class="cursor-glow" id="glow"></div>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="/" class="logo">the<span>alx</span>labs ⚗️</a>
+    <div class="nav-right">
+      <nav class="nav-links">
+      <a href="/">Home</a>
+      <a href="/projects" class="active">Projects</a>
+      <a href="/photos">Photos</a>
+      <a href="/about">About</a>
+      <a href="/uses">Uses</a>
+      <a href="/notes">Notes</a>
+      <a href="/stack">Stack</a>
+      <a href="/contact">Contact</a>
+        <a href="/guestbook">Guestbook</a>
+      </nav>
+      <div class="nav-divider"></div>
+      <div class="status-pill"><div class="status-dot"></div><span class="live-clock" id="clock"></span></div>
+      <a href="https://github.com/thealxlabs" target="_blank" class="social-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>GitHub</a>
+      <a href="https://twitter.com/thealxlabs" target="_blank" class="social-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Twitter</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="page-header">
+    <div class="page-deco">LAB</div>
+    <div class="page-tag fade-up d1">// 11 experiments · counting</div>
+    <div class="page-title fade-up d2"><span>EXPERI</span><br/><span class="outline">MENTS.</span></div>
+    <p class="page-desc fade-up d3">Everything that's been built, shipped, or abandoned. Some on the .ca domain, some scattered across Vercel. All made in the lab.</p>
+  </div>
+
+  <!-- STATUS BAR -->
+  <div id="ghStatus" style="font-size:0.6rem;letter-spacing:0.1em;color:rgba(255,255,255,0.28);margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+    <span id="ghStatusDot" style="width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-block;"></span>
+    <span id="ghStatusText">Fetching repos from GitHub...</span>
+  </div>
+
+  <!-- PROJECTS GRID - populated by JS -->
+  <div class="projects-grid" id="projectsGrid">
+    <!-- skeletons while loading -->
+    <div class="project-card" style="animation:none;"><div style="height:12px;background:rgba(255,255,255,0.06);margin-bottom:10px;width:60%;"></div><div style="height:20px;background:rgba(255,255,255,0.08);margin-bottom:8px;"></div><div style="height:10px;background:rgba(255,255,255,0.04);"></div></div>
+    <div class="project-card" style="animation:none;"><div style="height:12px;background:rgba(255,255,255,0.06);margin-bottom:10px;width:40%;"></div><div style="height:20px;background:rgba(255,255,255,0.08);margin-bottom:8px;"></div><div style="height:10px;background:rgba(255,255,255,0.04);"></div></div>
+    <div class="project-card" style="animation:none;"><div style="height:12px;background:rgba(255,255,255,0.06);margin-bottom:10px;width:55%;"></div><div style="height:20px;background:rgba(255,255,255,0.08);margin-bottom:8px;"></div><div style="height:10px;background:rgba(255,255,255,0.04);"></div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RECENT COMMITS / CHANGELOG from GitHub API -->
+  <div class="section-header"><h2 class="section-title">RECENT COMMITS</h2><span class="section-sub" id="commitSub">// loading from GitHub...</span></div>
+  <div class="changelog-list" id="commitsList">
+    <div class="changelog-item"><div class="changelog-date">—</div><div class="changelog-content"><div style="height:10px;background:rgba(255,255,255,0.05);width:200px;margin-bottom:6px;"></div><div style="height:8px;background:rgba(255,255,255,0.03);width:300px;"></div></div></div>
+    <div class="changelog-item"><div class="changelog-date">—</div><div class="changelog-content"><div style="height:10px;background:rgba(255,255,255,0.05);width:160px;margin-bottom:6px;"></div><div style="height:8px;background:rgba(255,255,255,0.03);width:260px;"></div></div></div>
+  </div>
+
+  <footer style="margin-top:60px;">
+    <div class="footer-logo">THEALXLABS</div>
+    <div class="footer-links"><a href="/">Home</a><a href="/about">About</a><a href="/stack">Stack</a><a href="/contact">Contact</a><a href="https://github.com/thealxlabs" target="_blank">GitHub</a></div>
+    <div class="footer-copy">© 2026 thealxlabs.ca 🇨🇦</div>
+  </footer>
+</div>
+
+<script>
+  document.addEventListener('mousemove',e=>{const g=document.getElementById('glow');if(g){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';}});
+  (function(){const trail=[];for(let i=0;i<12;i++){const d=document.createElement('div');d.style.cssText='position:fixed;width:6px;height:6px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:9999;opacity:0;transition:opacity 0.3s;transform:translate(-50%,-50%)';document.body.appendChild(d);trail.push({el:d,x:0,y:0});}let mx=0,my=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});setInterval(()=>{let lx=mx,ly=my;trail.forEach((t,i)=>{const ox=lx,oy=ly;t.el.style.left=t.x+'px';t.el.style.top=t.y+'px';t.el.style.opacity=String((12-i)/24);t.el.style.width=(6-i*0.3)+'px';t.el.style.height=(6-i*0.3)+'px';lx=t.x;ly=t.y;t.x+=(ox-t.x)*0.35;t.y+=(oy-t.y)*0.35;});},16);})();
+  const logo=document.querySelector('.logo');if(logo)logo.addEventListener('mouseenter',()=>{logo.style.transform=`skewX(${(Math.random()-0.5)*6}deg)`;setTimeout(()=>logo.style.transform='',150);});
+  function tick(){const el=document.getElementById('clock');if(el)el.textContent=new Date().toLocaleTimeString('en-CA',{timeZone:'America/Toronto',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+' ET';}tick();setInterval(tick,1000);
+  (function(){let buf='';document.addEventListener('keydown',e=>{buf=(buf+e.key).slice(-3).toUpperCase();if(buf==='ALX'){buf='';const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0a0a;cursor:pointer;';o.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:clamp(4rem,15vw,12rem);color:#ff3c00;animation:glitch 0.3s infinite;line-height:0.9;text-align:center">THE<br/>ALX<br/>LABS</div><div style="font-family:Space Mono,monospace;font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:24px;letter-spacing:0.2em">// YOU FOUND THE EASTER EGG. CLICK TO ESCAPE.</div><style>@keyframes glitch{0%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}33%{text-shadow:-3px 0 #ffe600,3px 0 #00ffcc;}66%{text-shadow:3px 2px #ff3c00,-3px -2px #00ffcc;}100%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}}</style>';document.body.appendChild(o);o.addEventListener('click',()=>o.remove());}});})();
+
+  // ── GITHUB API ──────────────────────────────────────────────
+  const GH_USER = 'thealxlabs';
+
+  function setStatus(ok, msg) {
+    document.getElementById('ghStatusDot').style.background = ok ? 'var(--accent2)' : 'var(--accent)';
+    document.getElementById('ghStatusText').textContent = msg;
+  }
+
+  function timeAgo(dateStr) {
+    const s = Math.floor((Date.now() - new Date(dateStr)) / 1000);
+    if (s < 60) return 'just now';
+    if (s < 3600) return Math.floor(s/60) + 'm ago';
+    if (s < 86400) return Math.floor(s/3600) + 'h ago';
+    if (s < 2592000) return Math.floor(s/86400) + 'd ago';
+    return new Date(dateStr).toLocaleDateString('en-CA', {month:'short', day:'numeric', year:'numeric'});
+  }
+
+  function getLang(lang) {
+    const map = {JavaScript:'JS', TypeScript:'TS', HTML:'HTML', CSS:'CSS', Python:'PY', null:'—'};
+    return map[lang] || lang || '—';
+  }
+
+  async function loadGitHub() {
+    try {
+      // Fetch all public repos
+      const res = await fetch(`https://api.github.com/users/${GH_USER}/repos?sort=updated&per_page=100`);
+      if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+      const repos = await res.json();
+
+      // Filter out forks, sort by updated
+      const ownRepos = repos.filter(r => !r.fork).sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at));
+
+      setStatus(true, `${ownRepos.length} repos · synced from GitHub · last updated ${timeAgo(ownRepos[0]?.updated_at)}`);
+
+      // Render project cards
+      const grid = document.getElementById('projectsGrid');
+      grid.innerHTML = ownRepos.map(repo => {
+        const isHosted = repo.homepage && repo.homepage.includes('thealxlabs.ca');
+        const link = repo.homepage || repo.html_url;
+        const label = isHosted ? '// hosted · thealxlabs.ca' : `// github.com/${GH_USER}`;
+        const cardClass = 'project-card' + (isHosted ? ' hosted' : '');
+        const urlLine = repo.homepage ? `<div class="card-url">${repo.homepage.replace('https://','')}</div>` : '';
+        const stars = repo.stargazers_count > 0 ? `<span class="card-tag">★ ${repo.stargazers_count}</span>` : '';
+        const lang = `<span class="card-tag">${getLang(repo.language)}</span>`;
+        return `<a href="${link}" target="_blank" class="${cardClass}">
+          <div class="card-label">${label}</div>
+          <div class="card-title">${repo.name}</div>
+          <div class="card-desc">${repo.description || 'No description yet.'}</div>
+          <div class="card-footer">${lang}${stars}<span class="card-arrow">→</span></div>
+          ${urlLine}
+        </a>`;
+      }).join('');
+
+      // Fetch recent commits across all repos (events API)
+      const evRes = await fetch(`https://api.github.com/users/${GH_USER}/events/public?per_page=30`);
+      const events = await evRes.json();
+
+      const pushEvents = events
+        .filter(e => e.type === 'PushEvent')
+        .flatMap(e => e.payload.commits.map(c => ({
+          repo: e.repo.name.replace(`${GH_USER}/`, ''),
+          message: c.message.split('\n')[0],
+          date: e.created_at,
+          url: `https://github.com/${e.repo.name}/commit/${c.sha}`
+        })))
+        .slice(0, 12);
+
+      document.getElementById('commitSub').textContent = `// ${pushEvents.length} recent commits · live from GitHub`;
+
+      document.getElementById('commitsList').innerHTML = pushEvents.length
+        ? pushEvents.map(c => `
+          <div class="changelog-item">
+            <div class="changelog-date" style="font-size:0.56rem">${timeAgo(c.date)}</div>
+            <div class="changelog-content">
+              <span class="changelog-badge badge-update" style="margin-bottom:4px">${c.repo}</span>
+              <div class="changelog-title"><a href="${c.url}" target="_blank" style="color:inherit;text-decoration:none">${c.message}</a></div>
+            </div>
+          </div>`).join('')
+        : '<div class="changelog-item"><div class="changelog-date">—</div><div class="changelog-content"><div class="changelog-title">No recent commits found.</div></div></div>';
+
+    } catch (err) {
+      setStatus(false, `GitHub API error: ${err.message} — showing cached data`);
+      // Fallback: static cards
+      document.getElementById('projectsGrid').innerHTML = `
+        <div class="project-card"><div class="card-label">// error</div><div class="card-title">Couldn't load repos</div><div class="card-desc">GitHub API rate limited or unavailable. Visit github.com/thealxlabs directly.</div><div class="card-footer"><a href="https://github.com/thealxlabs" target="_blank" style="color:var(--accent2);font-size:0.65rem;letter-spacing:0.1em">github.com/thealxlabs →</a></div></div>`;
+      document.getElementById('commitsList').innerHTML = '<div class="changelog-item"><div class="changelog-date">—</div><div class="changelog-content"><div class="changelog-title">Commits unavailable.</div></div></div>';
+    }
+  }
+
+  loadGitHub();
+</script>
+</body>
+</html>
