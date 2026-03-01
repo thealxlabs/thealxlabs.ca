@@ -52,25 +52,17 @@
   .filter-btn.active{background:var(--accent3);color:#000;border-color:var(--accent3);}
   .filter-btn:not(.active):hover{color:var(--accent3);border-color:rgba(255,230,0,0.3);}
 
-  /* MASONRY PHOTO GRID */
-  .photo-grid{columns:3;column-gap:2px;margin-bottom:60px;}
+  /* COLLAGE PHOTO GRID */
+  .photo-grid{columns:3 280px;column-gap:6px;margin-bottom:60px;}
   @media(max-width:800px){.photo-grid{columns:2;}}
   @media(max-width:500px){.photo-grid{columns:1;}}
 
-  .photo-item{break-inside:avoid;margin-bottom:2px;position:relative;overflow:hidden;cursor:pointer;display:block;}
+  .photo-item{break-inside:avoid;margin-bottom:6px;position:relative;overflow:hidden;cursor:pointer;display:block;}
   .photo-item.hidden{display:none;}
-  .photo-placeholder{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);position:relative;overflow:hidden;transition:all 0.3s;}
-  .photo-item:hover .photo-placeholder{border-color:var(--accent3);transform:scale(1.01);}
+  .photo-item img{width:100%;height:auto;display:block;transition:transform 0.4s ease;}
+  .photo-item:hover img{transform:scale(1.03);}
 
-  .ph-tall{padding-bottom:140%;}
-  .ph-wide{padding-bottom:65%;}
-  .ph-square{padding-bottom:100%;}
-  .photo-placeholder img{width:100%;display:block;height:auto;}
-  .photo-item:hover .photo-placeholder{border-color:var(--accent3);}
-
-  .photo-placeholder img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
-
-  .photo-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 50%);opacity:0;transition:opacity 0.3s;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;}
+  .photo-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 55%);opacity:0;transition:opacity 0.3s;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;}
   .photo-item:hover .photo-overlay{opacity:1;}
   .photo-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.05em;margin-bottom:3px;}
   .photo-meta{font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);}
@@ -157,95 +149,52 @@
 
   <div class="photo-grid" id="photoGrid">
     <div class="photo-item" data-cat="architecture" onclick="openLight(0)">
-      <div class="photo-placeholder ph-tall">
-        <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005836/IMG_0649_jmyszm.jpg" alt="Financial District, 6AM">
-      <div class="photo-placeholder">
-        <img src="https://picsum.photos/seed/alxarch0/600/840" alt="Financial District, 6AM" loading="lazy">
-        <div class="photo-overlay"><div class="photo-title">Financial District, 6AM</div><div class="photo-meta">Architecture · f/8 · 1/250s</div></div>
-      </div>
+      <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005836/IMG_0649_jmyszm.jpg" alt="Financial District, 6AM" loading="lazy">
+      <div class="photo-overlay"><div class="photo-title">Financial District, 6AM</div><div class="photo-meta">Architecture · f/8 · 1/250s</div></div>
     </div>
     <div class="photo-item" data-cat="geometry" onclick="openLight(1)">
-      <div class="photo-placeholder ph-square">
-        <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/IMG_0645_b679gp.jpg" alt="Triangulation">
-      <div class="photo-placeholder">
-        <img src="https://picsum.photos/seed/alxgeo1/800/800" alt="Triangulation" loading="lazy">
-        <div class="photo-overlay"><div class="photo-title">Triangulation</div><div class="photo-meta">Geometry · f/5.6 · 1/500s</div></div>
-      </div>
+      <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/IMG_0645_b679gp.jpg" alt="Triangulation" loading="lazy">
+      <div class="photo-overlay"><div class="photo-title">Triangulation</div><div class="photo-meta">Geometry · f/5.6 · 1/500s</div></div>
     </div>
     <div class="photo-item" data-cat="light" onclick="openLight(2)">
-      <div class="photo-placeholder ph-wide">
-        <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/DSC00059_qk2fxf.jpg" alt="Union Station, Noon">
-      <div class="photo-placeholder">
-        <img src="https://picsum.photos/seed/alxlight2/1200/780" alt="Union Station, Noon" loading="lazy">
-        <div class="photo-overlay"><div class="photo-title">Union Station, Noon</div><div class="photo-meta">Light · f/11 · 1/1000s</div></div>
-      </div>
+      <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/DSC00059_qk2fxf.jpg" alt="Union Station, Noon" loading="lazy">
+      <div class="photo-overlay"><div class="photo-title">Union Station, Noon</div><div class="photo-meta">Light · f/11 · 1/1000s</div></div>
     </div>
     <div class="photo-item" data-cat="street" onclick="openLight(3)">
-      <div class="photo-placeholder ph-wide">
-        <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/DSC00063_zkhohb.jpg" alt="King St. West">
-      <div class="photo-placeholder">
-        <img src="https://picsum.photos/seed/alxstreet3/1200/780" alt="King St. West" loading="lazy">
-        <div class="photo-overlay"><div class="photo-title">King St. West</div><div class="photo-meta">Street · f/8 · 1/320s</div></div>
-      </div>
+      <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/DSC00063_zkhohb.jpg" alt="King St. West" loading="lazy">
+      <div class="photo-overlay"><div class="photo-title">King St. West</div><div class="photo-meta">Street · f/8 · 1/320s</div></div>
     </div>
     <div class="photo-item" data-cat="architecture" onclick="openLight(4)">
-      <div class="photo-placeholder ph-tall">
-        <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005830/DSC00057_tbjyew.jpg" alt="Glass Tower, Dusk">
-      <div class="photo-placeholder">
-        <img src="https://picsum.photos/seed/alxarch4/600/840" alt="Glass Tower, Dusk" loading="lazy">
-        <div class="photo-overlay"><div class="photo-title">Glass Tower, Dusk</div><div class="photo-meta">Architecture · f/4 · 1/60s</div></div>
-      </div>
+      <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005830/DSC00057_tbjyew.jpg" alt="Glass Tower, Dusk" loading="lazy">
+      <div class="photo-overlay"><div class="photo-title">Glass Tower, Dusk</div><div class="photo-meta">Architecture · f/4 · 1/60s</div></div>
     </div>
     <div class="photo-item" data-cat="geometry" onclick="openLight(5)">
-      <div class="photo-placeholder ph-square">
-        <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00046_yxqzyw.jpg" alt="Recursive Grid">
-      <div class="photo-placeholder">
-        <img src="https://picsum.photos/seed/alxgeo5/800/800" alt="Recursive Grid" loading="lazy">
-        <div class="photo-overlay"><div class="photo-title">Recursive Grid</div><div class="photo-meta">Geometry · f/16 · 1/125s</div></div>
-      </div>
+      <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00046_yxqzyw.jpg" alt="Recursive Grid" loading="lazy">
+      <div class="photo-overlay"><div class="photo-title">Recursive Grid</div><div class="photo-meta">Geometry · f/16 · 1/125s</div></div>
     </div>
     <div class="photo-item" data-cat="light" onclick="openLight(6)">
-      <div class="photo-placeholder ph-tall">
-        <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005828/DSC00031_j85ugd.jpg" alt="Morning Cut">
-      <div class="photo-placeholder">
-        <img src="https://picsum.photos/seed/alxlight6/600/840" alt="Morning Cut" loading="lazy">
-        <div class="photo-overlay"><div class="photo-title">Morning Cut</div><div class="photo-meta">Light · f/2.8 · 1/2000s</div></div>
-      </div>
+      <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005828/DSC00031_j85ugd.jpg" alt="Morning Cut" loading="lazy">
+      <div class="photo-overlay"><div class="photo-title">Morning Cut</div><div class="photo-meta">Light · f/2.8 · 1/2000s</div></div>
     </div>
     <div class="photo-item" data-cat="street" onclick="openLight(7)">
-      <div class="photo-placeholder ph-square">
-        <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005828/DSC00037_wh05kb.jpg" alt="Yonge & Dundas">
-      <div class="photo-placeholder">
-        <img src="https://picsum.photos/seed/alxstreet7/800/800" alt="Yonge & Dundas" loading="lazy">
-        <div class="photo-overlay"><div class="photo-title">Yonge & Dundas</div><div class="photo-meta">Street · f/8 · 1/250s</div></div>
-      </div>
+      <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005828/DSC00037_wh05kb.jpg" alt="Yonge & Dundas" loading="lazy">
+      <div class="photo-overlay"><div class="photo-title">Yonge & Dundas</div><div class="photo-meta">Street · f/8 · 1/250s</div></div>
     </div>
     <div class="photo-item" data-cat="architecture" onclick="openLight(8)">
-      <div class="photo-placeholder ph-wide">
-        <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC00022_knc5ir.jpg" alt="Harbourfront Strip">
-      <div class="photo-placeholder">
-        <img src="https://picsum.photos/seed/alxarch8/1200/780" alt="Harbourfront Strip" loading="lazy">
-        <div class="photo-overlay"><div class="photo-title">Harbourfront Strip</div><div class="photo-meta">Architecture · f/11 · 1/500s</div></div>
-      </div>
+      <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC00022_knc5ir.jpg" alt="Harbourfront Strip" loading="lazy">
+      <div class="photo-overlay"><div class="photo-title">Harbourfront Strip</div><div class="photo-meta">Architecture · f/11 · 1/500s</div></div>
     </div>
-    <!-- Row 4 -->
     <div class="photo-item" data-cat="street" onclick="openLight(9)">
-      <div class="photo-placeholder ph-square">
-        <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC_8617_wpcutg.jpg" alt="Late Afternoon">
-        <div class="photo-overlay"><div class="photo-title">Late Afternoon</div><div class="photo-meta">Street · f/5.6 · 1/400s</div></div>
-      </div>
+      <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC_8617_wpcutg.jpg" alt="Late Afternoon" loading="lazy">
+      <div class="photo-overlay"><div class="photo-title">Late Afternoon</div><div class="photo-meta">Street · f/5.6 · 1/400s</div></div>
     </div>
     <div class="photo-item" data-cat="light" onclick="openLight(10)">
-      <div class="photo-placeholder ph-wide">
-        <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005820/DSC_8573_amb5m8.jpg" alt="Golden Hour">
-        <div class="photo-overlay"><div class="photo-title">Golden Hour</div><div class="photo-meta">Light · f/8 · 1/640s</div></div>
-      </div>
+      <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005820/DSC_8573_amb5m8.jpg" alt="Golden Hour" loading="lazy">
+      <div class="photo-overlay"><div class="photo-title">Golden Hour</div><div class="photo-meta">Light · f/8 · 1/640s</div></div>
     </div>
     <div class="photo-item" data-cat="geometry" onclick="openLight(11)">
-      <div class="photo-placeholder ph-tall">
-        <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC_8607_kuco1i.jpg" alt="The Angle">
-        <div class="photo-overlay"><div class="photo-title">The Angle</div><div class="photo-meta">Geometry · f/11 · 1/320s</div></div>
-      </div>
+      <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC_8607_kuco1i.jpg" alt="The Angle" loading="lazy">
+      <div class="photo-overlay"><div class="photo-title">The Angle</div><div class="photo-meta">Geometry · f/11 · 1/320s</div></div>
     </div>
   </div>
 
@@ -290,15 +239,6 @@
     {src:'https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC_8617_wpcutg.jpg',title:'Late Afternoon',meta:'Street · Nikon D3200 · 55mm · f/5.6 · 1/400s · ISO 400'},
     {src:'https://res.cloudinary.com/dyjibiyac/image/upload/v1769005820/DSC_8573_amb5m8.jpg',title:'Golden Hour',meta:'Light & Shadow · Nikon D3200 · 55mm · f/8 · 1/640s · ISO 200'},
     {src:'https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC_8607_kuco1i.jpg',title:'The Angle',meta:'Geometry · Nikon D3200 · 55mm · f/11 · 1/320s · ISO 200'},
-    {title:'Financial District, 6AM',meta:'Architecture · Nikon D3200 · 55mm · f/8 · 1/250s · ISO 200',src:'https://picsum.photos/seed/alxarch0/1200/1680'},
-    {title:'Triangulation',meta:'Geometry · Nikon D3200 · 55mm · f/5.6 · 1/500s · ISO 400',src:'https://picsum.photos/seed/alxgeo1/1200/1200'},
-    {title:'Union Station, Noon',meta:'Light & Shadow · Nikon D3200 · 55mm · f/11 · 1/1000s · ISO 100',src:'https://picsum.photos/seed/alxlight2/1200/780'},
-    {title:'King St. West',meta:'Street · Nikon D3200 · 55mm · f/8 · 1/320s · ISO 200',src:'https://picsum.photos/seed/alxstreet3/1200/780'},
-    {title:'Glass Tower, Dusk',meta:'Architecture · Nikon D3200 · 55mm · f/4 · 1/60s · ISO 800',src:'https://picsum.photos/seed/alxarch4/1200/1680'},
-    {title:'Recursive Grid',meta:'Geometry · Nikon D3200 · 55mm · f/16 · 1/125s · ISO 200',src:'https://picsum.photos/seed/alxgeo5/1200/1200'},
-    {title:'Morning Cut',meta:'Light & Shadow · Nikon D3200 · 55mm · f/2.8 · 1/2000s · ISO 100',src:'https://picsum.photos/seed/alxlight6/1200/1680'},
-    {title:'Yonge & Dundas',meta:'Street · Nikon D3200 · 55mm · f/8 · 1/250s · ISO 400',src:'https://picsum.photos/seed/alxstreet7/1200/1200'},
-    {title:'Harbourfront Strip',meta:'Architecture · Nikon D3200 · 55mm · f/11 · 1/500s · ISO 200',src:'https://picsum.photos/seed/alxarch8/1200/780'},
   ];
 
   function openLight(i){
