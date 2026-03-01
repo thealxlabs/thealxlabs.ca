@@ -13,7 +13,6 @@
   @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
   @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
   @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
-  @keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
 
   .topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
   .topbar-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:56px;}
@@ -61,13 +60,8 @@
   .photo-item{break-inside:avoid;margin-bottom:2px;position:relative;overflow:hidden;cursor:pointer;display:block;}
   .photo-item.hidden{display:none;}
   .photo-placeholder{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);position:relative;overflow:hidden;transition:all 0.3s;}
-  .photo-placeholder::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.03),transparent);background-size:200% 100%;animation:shimmer 2s infinite;}
-  .photo-item:hover .photo-placeholder{border-color:var(--accent3);transform:scale(1.01);}
-
-  /* Fake photo placeholder with abstract geometry - Toronto urban grid vibes */
-  .ph-tall{padding-bottom:140%;}
-  .ph-wide{padding-bottom:65%;}
-  .ph-square{padding-bottom:100%;}
+  .photo-placeholder img{width:100%;display:block;height:auto;}
+  .photo-item:hover .photo-placeholder{border-color:var(--accent3);}
 
   .photo-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 50%);opacity:0;transition:opacity 0.3s;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;}
   .photo-item:hover .photo-overlay{opacity:1;}
@@ -123,7 +117,6 @@
         <a href="/notes">Notes</a>
         <a href="/stack">Stack</a>
         <a href="/contact">Contact</a>
-        <a href="/guestbook">Guestbook</a>
       </nav>
       <div class="nav-divider"></div>
       <div class="status-pill"><div class="status-dot"></div><span class="live-clock" id="clock"></span></div>
@@ -159,60 +152,57 @@
   </div>
 
   <div class="photo-grid" id="photoGrid">
-    <!-- Row 1 -->
     <div class="photo-item" data-cat="architecture" onclick="openLight(0)">
-      <div class="photo-placeholder ph-tall">
-        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 280"><rect x="20" y="40" width="30" height="220" fill="none" stroke="white" stroke-width="1"/><rect x="60" y="20" width="30" height="240" fill="none" stroke="white" stroke-width="1"/><rect x="100" y="60" width="30" height="200" fill="none" stroke="white" stroke-width="1"/><rect x="140" y="10" width="30" height="250" fill="none" stroke="white" stroke-width="1"/><line x1="0" y1="260" x2="200" y2="260" stroke="rgba(255,230,0,0.5)" stroke-width="1"/></svg></div>
+      <div class="photo-placeholder">
+        <img src="https://picsum.photos/seed/alxarch0/600/840" alt="Financial District, 6AM" loading="lazy">
         <div class="photo-overlay"><div class="photo-title">Financial District, 6AM</div><div class="photo-meta">Architecture · f/8 · 1/250s</div></div>
       </div>
     </div>
     <div class="photo-item" data-cat="geometry" onclick="openLight(1)">
-      <div class="photo-placeholder ph-square">
-        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 200"><polygon points="100,10 190,190 10,190" fill="none" stroke="white" stroke-width="1"/><polygon points="100,50 160,170 40,170" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1"/><polygon points="100,90 130,150 70,150" fill="none" stroke="rgba(0,255,204,0.5)" stroke-width="1"/></svg></div>
+      <div class="photo-placeholder">
+        <img src="https://picsum.photos/seed/alxgeo1/800/800" alt="Triangulation" loading="lazy">
         <div class="photo-overlay"><div class="photo-title">Triangulation</div><div class="photo-meta">Geometry · f/5.6 · 1/500s</div></div>
       </div>
     </div>
     <div class="photo-item" data-cat="light" onclick="openLight(2)">
-      <div class="photo-placeholder ph-wide">
-        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 130"><line x1="0" y1="65" x2="200" y2="65" stroke="rgba(255,230,0,0.6)" stroke-width="1"/><line x1="100" y1="0" x2="100" y2="130" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><circle cx="100" cy="65" r="40" fill="none" stroke="rgba(255,60,0,0.4)" stroke-width="1"/><circle cx="100" cy="65" r="20" fill="none" stroke="rgba(255,60,0,0.2)" stroke-width="1"/></svg></div>
+      <div class="photo-placeholder">
+        <img src="https://picsum.photos/seed/alxlight2/1200/780" alt="Union Station, Noon" loading="lazy">
         <div class="photo-overlay"><div class="photo-title">Union Station, Noon</div><div class="photo-meta">Light · f/11 · 1/1000s</div></div>
       </div>
     </div>
-    <!-- Row 2 -->
     <div class="photo-item" data-cat="street" onclick="openLight(3)">
-      <div class="photo-placeholder ph-wide">
-        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 130"><rect x="0" y="60" width="200" height="2" fill="rgba(255,255,255,0.3)"/><rect x="0" y="70" width="200" height="1" fill="rgba(255,255,255,0.1)"/><rect x="90" y="0" width="3" height="130" fill="rgba(255,60,0,0.3)"/><rect x="110" y="0" width="1" height="130" fill="rgba(255,255,255,0.1)"/></svg></div>
+      <div class="photo-placeholder">
+        <img src="https://picsum.photos/seed/alxstreet3/1200/780" alt="King St. West" loading="lazy">
         <div class="photo-overlay"><div class="photo-title">King St. West</div><div class="photo-meta">Street · f/8 · 1/320s</div></div>
       </div>
     </div>
     <div class="photo-item" data-cat="architecture" onclick="openLight(4)">
-      <div class="photo-placeholder ph-tall">
-        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 280"><rect x="70" y="0" width="60" height="280" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="80" y="20" width="10" height="15" fill="rgba(0,255,204,0.2)"/><rect x="95" y="20" width="10" height="15" fill="rgba(0,255,204,0.2)"/><rect x="110" y="20" width="10" height="15" fill="rgba(0,255,204,0.2)"/><rect x="80" y="45" width="10" height="15" fill="rgba(0,255,204,0.15)"/><rect x="95" y="45" width="10" height="15" fill="rgba(255,230,0,0.3)"/><rect x="110" y="45" width="10" height="15" fill="rgba(0,255,204,0.15)"/></svg></div>
+      <div class="photo-placeholder">
+        <img src="https://picsum.photos/seed/alxarch4/600/840" alt="Glass Tower, Dusk" loading="lazy">
         <div class="photo-overlay"><div class="photo-title">Glass Tower, Dusk</div><div class="photo-meta">Architecture · f/4 · 1/60s</div></div>
       </div>
     </div>
     <div class="photo-item" data-cat="geometry" onclick="openLight(5)">
-      <div class="photo-placeholder ph-square">
-        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 200"><rect x="10" y="10" width="180" height="180" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><rect x="40" y="40" width="120" height="120" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="70" y="70" width="60" height="60" fill="none" stroke="rgba(0,255,204,0.5)" stroke-width="1"/><rect x="90" y="90" width="20" height="20" fill="rgba(255,60,0,0.4)"/></svg></div>
+      <div class="photo-placeholder">
+        <img src="https://picsum.photos/seed/alxgeo5/800/800" alt="Recursive Grid" loading="lazy">
         <div class="photo-overlay"><div class="photo-title">Recursive Grid</div><div class="photo-meta">Geometry · f/16 · 1/125s</div></div>
       </div>
     </div>
-    <!-- Row 3 -->
     <div class="photo-item" data-cat="light" onclick="openLight(6)">
-      <div class="photo-placeholder ph-tall">
-        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 280"><line x1="0" y1="0" x2="200" y2="280" stroke="rgba(255,230,0,0.4)" stroke-width="1"/><line x1="200" y1="0" x2="0" y2="280" stroke="rgba(255,230,0,0.2)" stroke-width="1"/><circle cx="100" cy="140" r="60" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg></div>
+      <div class="photo-placeholder">
+        <img src="https://picsum.photos/seed/alxlight6/600/840" alt="Morning Cut" loading="lazy">
         <div class="photo-overlay"><div class="photo-title">Morning Cut</div><div class="photo-meta">Light · f/2.8 · 1/2000s</div></div>
       </div>
     </div>
     <div class="photo-item" data-cat="street" onclick="openLight(7)">
-      <div class="photo-placeholder ph-square">
-        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 200"><circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/><circle cx="100" cy="100" r="50" fill="none" stroke="rgba(255,60,0,0.3)" stroke-width="1"/><line x1="20" y1="100" x2="180" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="100" y1="20" x2="100" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="1"/></svg></div>
+      <div class="photo-placeholder">
+        <img src="https://picsum.photos/seed/alxstreet7/800/800" alt="Yonge & Dundas" loading="lazy">
         <div class="photo-overlay"><div class="photo-title">Yonge & Dundas</div><div class="photo-meta">Street · f/8 · 1/250s</div></div>
       </div>
     </div>
     <div class="photo-item" data-cat="architecture" onclick="openLight(8)">
-      <div class="photo-placeholder ph-wide">
-        <div class="photo-art"><svg width="80%" height="80%" viewBox="0 0 200 130"><rect x="0" y="40" width="200" height="50" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><rect x="20" y="50" width="20" height="30" fill="rgba(0,255,204,0.1)"/><rect x="50" y="50" width="20" height="30" fill="rgba(0,255,204,0.2)"/><rect x="80" y="50" width="20" height="30" fill="rgba(0,255,204,0.15)"/><rect x="110" y="50" width="20" height="30" fill="rgba(255,230,0,0.2)"/><rect x="140" y="50" width="20" height="30" fill="rgba(0,255,204,0.1)"/><rect x="170" y="50" width="20" height="30" fill="rgba(0,255,204,0.2)"/></svg></div>
+      <div class="photo-placeholder">
+        <img src="https://picsum.photos/seed/alxarch8/1200/780" alt="Harbourfront Strip" loading="lazy">
         <div class="photo-overlay"><div class="photo-title">Harbourfront Strip</div><div class="photo-meta">Architecture · f/11 · 1/500s</div></div>
       </div>
     </div>
@@ -220,7 +210,7 @@
 
   <div class="insta-cta">
     <h3>MORE ON INSTAGRAM</h3>
-    <p>These are placeholders — replace with your real shots. The full archive lives at @alexedgraphy. Every image shot on the D3200, manual, in Toronto.</p>
+    <p>The full archive lives at @alexedgraphy. Every image shot on the D3200, manual, in Toronto.</p>
     <a href="https://www.instagram.com/alexedgraphy" target="_blank" class="btn btn-yellow">↗ @alexedgraphy</a>
   </div>
 
@@ -233,7 +223,7 @@
 
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLight()">
-  <div class="lb-inner" onclick="e=>e.stopPropagation()">
+  <div class="lb-inner" onclick="event.stopPropagation()">
     <button class="lb-close" onclick="closeLight()">✕ Close</button>
     <div id="lbContent"></div>
   </div>
@@ -247,20 +237,20 @@
   (function(){let buf='';document.addEventListener('keydown',e=>{buf=(buf+e.key).slice(-3).toUpperCase();if(buf==='ALX'){buf='';const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0a0a;cursor:pointer;';o.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:clamp(4rem,15vw,12rem);color:#ff3c00;animation:glitch 0.3s infinite;line-height:0.9;text-align:center">THE<br/>ALX<br/>LABS</div><div style="font-family:Space Mono,monospace;font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:24px;letter-spacing:0.2em">// YOU FOUND THE EASTER EGG. CLICK TO ESCAPE.</div><style>@keyframes glitch{0%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}33%{text-shadow:-3px 0 #ffe600,3px 0 #00ffcc;}66%{text-shadow:3px 2px #ff3c00,-3px -2px #00ffcc;}100%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}}</style>';document.body.appendChild(o);o.addEventListener('click',()=>o.remove());}});})();
 
   const photos = [
-    {title:'Financial District, 6AM',meta:'Architecture · Nikon D3200 · 55mm · f/8 · 1/250s · ISO 200'},
-    {title:'Triangulation',meta:'Geometry · Nikon D3200 · 55mm · f/5.6 · 1/500s · ISO 400'},
-    {title:'Union Station, Noon',meta:'Light & Shadow · Nikon D3200 · 55mm · f/11 · 1/1000s · ISO 100'},
-    {title:'King St. West',meta:'Street · Nikon D3200 · 55mm · f/8 · 1/320s · ISO 200'},
-    {title:'Glass Tower, Dusk',meta:'Architecture · Nikon D3200 · 55mm · f/4 · 1/60s · ISO 800'},
-    {title:'Recursive Grid',meta:'Geometry · Nikon D3200 · 55mm · f/16 · 1/125s · ISO 200'},
-    {title:'Morning Cut',meta:'Light & Shadow · Nikon D3200 · 55mm · f/2.8 · 1/2000s · ISO 100'},
-    {title:'Yonge & Dundas',meta:'Street · Nikon D3200 · 55mm · f/8 · 1/250s · ISO 400'},
-    {title:'Harbourfront Strip',meta:'Architecture · Nikon D3200 · 55mm · f/11 · 1/500s · ISO 200'},
+    {title:'Financial District, 6AM',meta:'Architecture · Nikon D3200 · 55mm · f/8 · 1/250s · ISO 200',src:'https://picsum.photos/seed/alxarch0/1200/1680'},
+    {title:'Triangulation',meta:'Geometry · Nikon D3200 · 55mm · f/5.6 · 1/500s · ISO 400',src:'https://picsum.photos/seed/alxgeo1/1200/1200'},
+    {title:'Union Station, Noon',meta:'Light & Shadow · Nikon D3200 · 55mm · f/11 · 1/1000s · ISO 100',src:'https://picsum.photos/seed/alxlight2/1200/780'},
+    {title:'King St. West',meta:'Street · Nikon D3200 · 55mm · f/8 · 1/320s · ISO 200',src:'https://picsum.photos/seed/alxstreet3/1200/780'},
+    {title:'Glass Tower, Dusk',meta:'Architecture · Nikon D3200 · 55mm · f/4 · 1/60s · ISO 800',src:'https://picsum.photos/seed/alxarch4/1200/1680'},
+    {title:'Recursive Grid',meta:'Geometry · Nikon D3200 · 55mm · f/16 · 1/125s · ISO 200',src:'https://picsum.photos/seed/alxgeo5/1200/1200'},
+    {title:'Morning Cut',meta:'Light & Shadow · Nikon D3200 · 55mm · f/2.8 · 1/2000s · ISO 100',src:'https://picsum.photos/seed/alxlight6/1200/1680'},
+    {title:'Yonge & Dundas',meta:'Street · Nikon D3200 · 55mm · f/8 · 1/250s · ISO 400',src:'https://picsum.photos/seed/alxstreet7/1200/1200'},
+    {title:'Harbourfront Strip',meta:'Architecture · Nikon D3200 · 55mm · f/11 · 1/500s · ISO 200',src:'https://picsum.photos/seed/alxarch8/1200/780'},
   ];
 
   function openLight(i){
     const p = photos[i];
-    document.getElementById('lbContent').innerHTML = `<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:3rem;color:rgba(255,255,255,0.1)">PHOTO ${i+1}</div><div style="font-family:Bebas Neue,sans-serif;font-size:1.8rem;margin-top:16px">${p.title}</div><div style="font-size:0.62rem;color:rgba(255,255,255,0.35);letter-spacing:0.1em;margin-top:6px">${p.meta}</div>`;
+    document.getElementById('lbContent').innerHTML = `<img src="${p.src}" alt="${p.title}" class="lb-img"><div class="lb-title">${p.title}</div><div class="lb-info">${p.meta}</div>`;
     document.getElementById('lightbox').classList.add('open');
   }
   function closeLight(){document.getElementById('lightbox').classList.remove('open');}

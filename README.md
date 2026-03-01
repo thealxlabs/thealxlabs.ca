@@ -14,7 +14,6 @@ Personal website and digital lab for [Alexander Wondwossen](https://thealxlabs.c
 | `/notes` | Short-form lab notes on code, design, photography |
 | `/stack` | Tech stack breakdown + skill bars |
 | `/contact` | Links, availability, Toronto time |
-| `/guestbook` | Sign the guestbook |
 
 ## Stack
 
