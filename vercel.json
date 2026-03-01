@@ -8,7 +8,6 @@
     { "source": "/uses", "destination": "/uses.html" },
     { "source": "/notes", "destination": "/notes.html" },
     { "source": "/stack", "destination": "/stack.html" },
-    { "source": "/contact", "destination": "/contact.html" },
-    { "source": "/guestbook", "destination": "/guestbook.html" }
+    { "source": "/contact", "destination": "/contact.html" }
   ]
 }
