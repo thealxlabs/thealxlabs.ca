@@ -132,7 +132,7 @@
 <div class="container">
   <div class="page-header">
     <div class="page-deco">LAB</div>
-    <div class="page-tag fade-up d1">// 11 experiments · counting</div>
+    <div class="page-tag fade-up d1" id="pageTag">// loading experiments...</div>
     <div class="page-title fade-up d2"><span>EXPERI</span><br/><span class="outline">MENTS.</span></div>
     <p class="page-desc fade-up d3">Everything that's been built, shipped, or abandoned. Some on the .ca domain, some scattered across Vercel. All made in the lab.</p>
   </div>
@@ -143,21 +143,29 @@
     <span id="ghStatusText">Fetching repos from GitHub...</span>
   </div>
 
-  <!-- PROJECTS GRID - populated by JS -->
-  <div class="projects-grid" id="projectsGrid">
-    <!-- skeletons while loading -->
-    <div class="project-card" style="animation:none;"><div style="height:12px;background:rgba(255,255,255,0.06);margin-bottom:10px;width:60%;"></div><div style="height:20px;background:rgba(255,255,255,0.08);margin-bottom:8px;"></div><div style="height:10px;background:rgba(255,255,255,0.04);"></div></div>
-    <div class="project-card" style="animation:none;"><div style="height:12px;background:rgba(255,255,255,0.06);margin-bottom:10px;width:40%;"></div><div style="height:20px;background:rgba(255,255,255,0.08);margin-bottom:8px;"></div><div style="height:10px;background:rgba(255,255,255,0.04);"></div></div>
-    <div class="project-card" style="animation:none;"><div style="height:12px;background:rgba(255,255,255,0.06);margin-bottom:10px;width:55%;"></div><div style="height:20px;background:rgba(255,255,255,0.08);margin-bottom:8px;"></div><div style="height:10px;background:rgba(255,255,255,0.04);"></div></div>
+  <!-- TAB BAR (shown after data loads) -->
+  <div class="tab-bar" id="tabBar" style="display:none">
+    <button class="tab-btn active" onclick="showTab('projects',this)">Projects <span class="tab-count" id="projCount">—</span></button>
+    <button class="tab-btn" onclick="showTab('commits',this)">Commits <span class="tab-count" id="commitCount">—</span></button>
   </div>
 
-  <div class="divider"></div>
+  <!-- PROJECTS TAB PANEL - populated by JS -->
+  <div class="tab-panel active" id="tab-projects">
+    <div class="projects-grid" id="projectsGrid">
+      <!-- skeletons while loading -->
+      <div class="project-card" style="animation:none;"><div style="height:12px;background:rgba(255,255,255,0.06);margin-bottom:10px;width:60%;"></div><div style="height:20px;background:rgba(255,255,255,0.08);margin-bottom:8px;"></div><div style="height:10px;background:rgba(255,255,255,0.04);"></div></div>
+      <div class="project-card" style="animation:none;"><div style="height:12px;background:rgba(255,255,255,0.06);margin-bottom:10px;width:40%;"></div><div style="height:20px;background:rgba(255,255,255,0.08);margin-bottom:8px;"></div><div style="height:10px;background:rgba(255,255,255,0.04);"></div></div>
+      <div class="project-card" style="animation:none;"><div style="height:12px;background:rgba(255,255,255,0.06);margin-bottom:10px;width:55%;"></div><div style="height:20px;background:rgba(255,255,255,0.08);margin-bottom:8px;"></div><div style="height:10px;background:rgba(255,255,255,0.04);"></div></div>
+    </div>
+  </div>
 
-  <!-- RECENT COMMITS / CHANGELOG from GitHub API -->
-  <div class="section-header"><h2 class="section-title">RECENT COMMITS</h2><span class="section-sub" id="commitSub">// loading from GitHub...</span></div>
-  <div class="changelog-list" id="commitsList">
-    <div class="changelog-item"><div class="changelog-date">—</div><div class="changelog-content"><div style="height:10px;background:rgba(255,255,255,0.05);width:200px;margin-bottom:6px;"></div><div style="height:8px;background:rgba(255,255,255,0.03);width:300px;"></div></div></div>
-    <div class="changelog-item"><div class="changelog-date">—</div><div class="changelog-content"><div style="height:10px;background:rgba(255,255,255,0.05);width:160px;margin-bottom:6px;"></div><div style="height:8px;background:rgba(255,255,255,0.03);width:260px;"></div></div></div>
+  <!-- COMMITS TAB PANEL - populated by JS -->
+  <div class="tab-panel" id="tab-commits">
+    <div class="section-header"><h2 class="section-title">RECENT COMMITS</h2><span class="section-sub" id="commitSub">// loading from GitHub...</span></div>
+    <div class="changelog-list" id="commitsList">
+      <div class="changelog-item"><div class="changelog-date">—</div><div class="changelog-content"><div style="height:10px;background:rgba(255,255,255,0.05);width:200px;margin-bottom:6px;"></div><div style="height:8px;background:rgba(255,255,255,0.03);width:300px;"></div></div></div>
+      <div class="changelog-item"><div class="changelog-date">—</div><div class="changelog-content"><div style="height:10px;background:rgba(255,255,255,0.05);width:160px;margin-bottom:6px;"></div><div style="height:8px;background:rgba(255,255,255,0.03);width:260px;"></div></div></div>
+    </div>
   </div>
 
   <footer style="margin-top:60px;">
@@ -173,6 +181,14 @@
   const logo=document.querySelector('.logo');if(logo)logo.addEventListener('mouseenter',()=>{logo.style.transform=`skewX(${(Math.random()-0.5)*6}deg)`;setTimeout(()=>logo.style.transform='',150);});
   function tick(){const el=document.getElementById('clock');if(el)el.textContent=new Date().toLocaleTimeString('en-CA',{timeZone:'America/Toronto',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+' ET';}tick();setInterval(tick,1000);
   (function(){let buf='';document.addEventListener('keydown',e=>{buf=(buf+e.key).slice(-3).toUpperCase();if(buf==='ALX'){buf='';const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0a0a;cursor:pointer;';o.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:clamp(4rem,15vw,12rem);color:#ff3c00;animation:glitch 0.3s infinite;line-height:0.9;text-align:center">THE<br/>ALX<br/>LABS</div><div style="font-family:Space Mono,monospace;font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:24px;letter-spacing:0.2em">// YOU FOUND THE EASTER EGG. CLICK TO ESCAPE.</div><style>@keyframes glitch{0%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}33%{text-shadow:-3px 0 #ffe600,3px 0 #00ffcc;}66%{text-shadow:3px 2px #ff3c00,-3px -2px #00ffcc;}100%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}}</style>';document.body.appendChild(o);o.addEventListener('click',()=>o.remove());}});})();
+
+  // ── TAB SWITCHING ───────────────────────────────────────────
+  function showTab(name, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+  }
 
   // ── GITHUB API ──────────────────────────────────────────────
   const GH_USER = 'thealxlabs';
@@ -207,6 +223,7 @@
       const ownRepos = repos.filter(r => !r.fork).sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at));
 
       setStatus(true, `${ownRepos.length} repos · synced from GitHub · last updated ${timeAgo(ownRepos[0]?.updated_at)}`);
+      document.getElementById('pageTag').textContent = `// ${ownRepos.length} experiments · counting`;
 
       // Render project cards
       const grid = document.getElementById('projectsGrid');
@@ -242,6 +259,9 @@
         .slice(0, 12);
 
       document.getElementById('commitSub').textContent = `// ${pushEvents.length} recent commits · live from GitHub`;
+      document.getElementById('projCount').textContent = ownRepos.length;
+      document.getElementById('commitCount').textContent = pushEvents.length;
+      document.getElementById('tabBar').style.display = '';
 
       document.getElementById('commitsList').innerHTML = pushEvents.length
         ? pushEvents.map(c => `
