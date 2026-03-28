@@ -1,0 +1,13 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/projects", "destination": "/projects.html" },
+    { "source": "/photos", "destination": "/photos.html" },
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/uses", "destination": "/uses.html" },
+    { "source": "/notes", "destination": "/notes.html" },
+    { "source": "/stack", "destination": "/stack.html" },
+    { "source": "/contact", "destination": "/contact.html" }
+  ]
+}

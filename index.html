@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>thealxlabs — home</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0a0a0a; --fg:#f0f0f0; --accent:#ff3c00; --accent2:#00ffcc; --accent3:#ffe600; --border:rgba(255,255,255,0.08); }
+  *{margin:0;padding:0;box-sizing:border-box;} html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--fg);font-family:'Space Mono',monospace;min-height:100vh;overflow-x:hidden;cursor:crosshair;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:40px 40px;z-index:0;pointer-events:none;}
+  @keyframes drift{0%{transform:translate(0,0);}100%{transform:translate(-50px,-50px);}}
+  @keyframes blink{50%{opacity:0;}}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-18px);}}
+  @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+  @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+    /* NAV */
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+  .topbar-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:56px;}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.08em;color:var(--fg);text-decoration:none;}
+  .logo span{color:var(--accent);}
+  .nav-right{display:flex;gap:6px;align-items:center;}
+  .nav-links{display:flex;gap:2px;margin-right:4px;}
+  .nav-links a{color:rgba(255,255,255,0.38);text-decoration:none;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:6px 11px;transition:all 0.2s;border:1px solid transparent;}
+  .nav-links a:hover,.nav-links a.active{color:var(--accent2);border-color:rgba(0,255,204,0.2);}
+  .nav-divider{width:1px;height:20px;background:var(--border);margin:0 4px;}
+  .status-pill{display:flex;align-items:center;gap:6px;font-size:0.57rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent2);border:1px solid rgba(0,255,204,0.2);padding:5px 10px;background:rgba(0,255,204,0.04);}
+  .status-dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite;}
+  .live-clock{font-size:0.57rem;color:rgba(255,255,255,0.26);}
+  .social-pill{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.36);text-decoration:none;font-size:0.61rem;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--border);padding:5px 10px;transition:all 0.2s;}
+  .social-pill:hover{color:var(--fg);border-color:var(--accent2);background:rgba(0,255,204,0.04);}
+
+  /* CONTAINER */
+  .container{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  /* HERO */
+  .hero{padding:80px 0 60px;position:relative;}
+  .hero-tag{display:inline-flex;align-items:center;gap:8px;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent2);border:1px solid var(--accent2);padding:4px 10px;margin-bottom:22px;animation:blink 2s step-end infinite;}
+  .hero-dot{width:5px;height:5px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite;}
+  .hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,14vw,11rem);line-height:0.88;letter-spacing:-0.01em;margin-bottom:30px;}
+  .line1{display:block;color:var(--fg);}
+  .line2{display:block;color:transparent;-webkit-text-stroke:1.5px var(--accent);}
+  .line3{display:block;color:var(--accent3);}
+  .hero-desc{max-width:520px;font-size:0.81rem;line-height:1.85;color:rgba(255,255,255,0.48);margin-bottom:38px;}
+  .hero-desc strong{color:var(--fg);}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+  .hero-deco{position:absolute;right:0;top:60px;font-size:9rem;opacity:0.04;font-family:'Bebas Neue',sans-serif;pointer-events:none;user-select:none;animation:float 6s ease-in-out infinite;}
+
+  .btn{font-family:'Space Mono',monospace;font-size:0.71rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:13px 24px;transition:all 0.15s;display:inline-flex;align-items:center;gap:7px;cursor:pointer;border:none;background:none;}
+  .btn-primary{background:var(--accent);color:#fff;}
+  .btn-primary:hover{background:var(--fg);color:var(--bg);transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--accent);}
+  .btn-outline{border:1px solid rgba(255,255,255,0.2);color:var(--fg);}
+  .btn-outline:hover{border-color:var(--accent3);color:var(--accent3);transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--accent3);}
+  .btn-ghost{border:1px solid var(--border);color:rgba(255,255,255,0.4);}
+  .btn-ghost:hover{border-color:var(--accent2);color:var(--accent2);}
+
+  .fade-up{opacity:0;transform:translateY(20px);animation:fadeUp 0.6s forwards;}
+  .d1{animation-delay:0.05s;} .d2{animation-delay:0.18s;} .d3{animation-delay:0.32s;} .d4{animation-delay:0.46s;}
+
+  /* MARQUEE */
+  .marquee-wrap{border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:11px 0;background:rgba(255,60,0,0.04);}
+  .marquee{display:flex;animation:marquee 22s linear infinite;white-space:nowrap;}
+  .marquee span{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.15em;color:rgba(255,255,255,0.16);padding:0 26px;}
+  .marquee span.hot{color:var(--accent);}
+
+  /* ABOUT STRIP */
+  .about-strip{padding:70px 0;}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+  .about-left h2{font-family:'Bebas Neue',sans-serif;font-size:3rem;line-height:1;margin-bottom:18px;}
+  .about-left h2 em{font-style:normal;color:var(--accent);}
+  .about-left p{font-size:0.77rem;line-height:1.85;color:rgba(255,255,255,0.42);margin-bottom:14px;}
+  .about-left p strong{color:var(--fg);}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,0.06);}
+  .stat{background:var(--bg);padding:26px 22px;}
+  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.7rem;line-height:1;color:var(--accent3);}
+  .stat-label{font-size:0.57rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.26);margin-top:4px;}
+
+  /* PROJECT PREVIEW */
+  .section{padding:70px 0;}
+  .section-header{display:flex;align-items:baseline;gap:14px;margin-bottom:32px;flex-wrap:wrap;}
+  .section-title{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;letter-spacing:0.05em;}
+  .section-sub{font-size:0.62rem;color:var(--accent2);letter-spacing:0.1em;}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);}
+
+  .projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;}
+  .project-card{position:relative;border:1px solid rgba(255,255,255,0.07);padding:26px;text-decoration:none;color:var(--fg);background:rgba(255,255,255,0.015);transition:all 0.18s;overflow:hidden;display:block;}
+  .project-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,60,0,0.06),transparent);opacity:0;transition:opacity 0.3s;}
+  .project-card:hover::before{opacity:1;}
+  .project-card:hover{border-color:rgba(255,60,0,0.35);transform:translate(-2px,-2px);box-shadow:4px 4px 0 rgba(255,60,0,0.14);}
+  .project-card.hosted{background:rgba(0,255,204,0.02);}
+  .project-card.hosted::before{background:linear-gradient(135deg,rgba(0,255,204,0.05),transparent);}
+  .project-card.hosted:hover{border-color:rgba(0,255,204,0.3);box-shadow:4px 4px 0 rgba(0,255,204,0.1);}
+  .project-card.hosted .card-arrow{color:var(--accent2);}
+  .card-label{font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent2);margin-bottom:9px;}
+  .card-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.04em;margin-bottom:8px;}
+  .card-desc{font-size:0.68rem;line-height:1.7;color:rgba(255,255,255,0.38);}
+  .card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:16px;}
+  .card-tag{font-size:0.5rem;letter-spacing:0.15em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.1);padding:2px 6px;color:rgba(255,255,255,0.24);}
+  .card-arrow{font-size:1rem;opacity:0;transform:translate(-4px,4px);transition:all 0.18s;color:var(--accent);}
+  .project-card:hover .card-arrow{opacity:1;transform:translate(0,0);}
+  .card-url{font-size:0.54rem;color:rgba(255,255,255,0.17);margin-top:5px;}
+  .see-all{display:inline-flex;align-items:center;gap:8px;margin-top:24px;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.38);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:2px;transition:all 0.2s;}
+  .see-all:hover{color:var(--accent2);border-color:var(--accent2);}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--border);padding:34px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:rgba(255,255,255,0.15);letter-spacing:0.1em;}
+  .footer-links{display:flex;gap:16px;}
+  .footer-links a{font-size:0.57rem;color:rgba(255,255,255,0.24);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+  .footer-links a:hover{color:var(--accent2);}
+  .footer-copy{font-size:0.57rem;color:rgba(255,255,255,0.15);letter-spacing:0.08em;}
+
+  .cursor-glow{position:fixed;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(255,60,0,0.05) 0%,transparent 70%);pointer-events:none;transform:translate(-50%,-50%);z-index:0;left:-999px;top:-999px;}
+
+  /* TERMINAL */
+  .terminal{border:1px solid var(--border);overflow:hidden;background:#050505;}
+  .term-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;background:rgba(255,255,255,0.04);border-bottom:1px solid var(--border);}
+  .term-dots{display:flex;gap:6px;}
+  .td{width:10px;height:10px;border-radius:50%;}
+  .td.red{background:#ff5f57;}
+  .td.yellow{background:#febc2e;}
+  .td.green{background:#28c840;}
+  .term-title{font-size:0.6rem;color:rgba(255,255,255,0.28);letter-spacing:0.08em;margin-left:auto;}
+  .term-body{padding:20px 24px;display:flex;flex-direction:column;gap:6px;}
+  .term-line{font-size:0.72rem;line-height:1.6;}
+  .term-prompt{color:var(--accent2);}
+  .term-cmd{color:var(--fg);}
+  .term-out{color:rgba(255,255,255,0.38);padding-left:16px;}
+  .term-blink{color:var(--accent2);animation:blink 1s step-end infinite;}
+
+  /* NOW GRID */
+  .now-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:2px;}
+  .now-card{border:1px solid var(--border);padding:26px;background:rgba(255,255,255,0.015);position:relative;overflow:hidden;}
+  .now-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+  .now-card.building::before{background:var(--accent);}
+  .now-card.shooting::before{background:var(--accent3);}
+  .now-card.listening::before{background:var(--accent2);}
+  .now-card.reading::before{background:rgba(255,255,255,0.2);}
+  .now-label{font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:10px;}
+  .now-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.04em;margin-bottom:8px;}
+  .now-desc{font-size:0.68rem;line-height:1.7;color:rgba(255,255,255,0.38);margin-bottom:14px;}
+  .now-bar{height:2px;background:rgba(255,255,255,0.06);margin-bottom:6px;overflow:hidden;}
+  .now-fill{height:100%;background:var(--accent);transition:width 1s ease;}
+  .now-pct{font-size:0.56rem;color:var(--accent);letter-spacing:0.1em;}
+  .now-meta{font-size:0.62rem;color:rgba(255,255,255,0.3);letter-spacing:0.06em;}
+  .now-refresh{font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;background:none;border:1px solid var(--border);color:rgba(255,255,255,0.3);padding:5px 10px;cursor:pointer;transition:all 0.2s;margin-top:6px;}
+  .now-refresh:hover{color:var(--accent2);border-color:var(--accent2);}
+
+  /* LAB NOTE */
+  .lab-note{border:1px solid var(--border);padding:36px;background:rgba(255,230,0,0.02);position:relative;overflow:hidden;}
+  .lab-note::before{content:'✎';position:absolute;right:24px;top:20px;font-size:3rem;opacity:0.07;}
+  .lab-note-tag{font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent3);margin-bottom:14px;}
+  .lab-note-text{font-size:0.9rem;line-height:1.8;color:rgba(255,255,255,0.6);max-width:680px;font-style:italic;margin-bottom:20px;}
+  .note-btn{font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;background:none;border:1px solid rgba(255,230,0,0.2);color:var(--accent3);padding:7px 14px;cursor:pointer;transition:all 0.2s;}
+  .note-btn:hover{background:rgba(255,230,0,0.05);border-color:var(--accent3);}
+
+  @media(max-width:700px){.about-grid{grid-template-columns:1fr;}.now-grid{grid-template-columns:1fr;}}
+</style>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.ico">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+<div class="cursor-glow" id="glow"></div>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="/" class="logo">the<span>alx</span>labs</a>
+    <div class="nav-right">
+      <nav class="nav-links">
+      <a href="/" class="active">Home</a>
+      <a href="/projects">Projects</a>
+      <a href="/photos">Photos</a>
+      <a href="/about">About</a>
+      <a href="/uses">Uses</a>
+      <a href="/stack">Stack</a>
+      <a href="/contact">Contact</a>
+      </nav>
+      <div class="nav-divider"></div>
+      <div class="status-pill"><div class="status-dot"></div><span class="live-clock" id="clock"></span></div>
+      <a href="https://github.com/thealxlabs" target="_blank" class="social-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>GitHub</a>
+      <a href="https://twitter.com/thealxlabs" target="_blank" class="social-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Twitter</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <section class="hero">
+    <div class="hero-deco">ALX</div>
+    <div class="hero-tag fade-up d1"><div class="hero-dot"></div>Alexander Wondwossen · Toronto, CA · thealxlabs</div>
+    <h1 class="fade-up d2">
+      <span class="line1">WE BUILD</span>
+      <span class="line2">WEIRD</span>
+      <span class="line3">THINGS.</span>
+    </h1>
+    <p class="hero-desc fade-up d3">
+      <strong>thealxlabs</strong> is a Toronto-based software lab — AI tools, developer utilities, and open-source experiments. 35+ projects shipped across TypeScript, React, Python, and more. Member of Hack Club. Always building.
+    </p>
+    <div class="hero-actions fade-up d4">
+      <a href="/projects" class="btn btn-primary">See the work →</a>
+      <a href="/about" class="btn btn-outline">About the lab ↗</a>
+      <a href="/contact" class="btn btn-ghost">Get in touch</a>
+    </div>
+  </section>
+</div>
+
+<div class="marquee-wrap fade-up">
+  <div class="marquee">
+    <span class="hot">// DEVELOPER</span><span>CREATOR</span><span>PHOTOGRAPHER</span><span class="hot">// TORONTO CA</span><span>TYPESCRIPT</span><span>REACT</span><span class="hot">// AI TOOLS</span><span>NIKON D3200</span><span>HACK CLUB</span><span class="hot">// THEALXLABS.CA</span><span>35+ REPOS</span><span>SHIP FAST</span><span>OPEN SOURCE</span><span class="hot">// CONDUCTOR</span><span>ARCHITECT</span><span>DARK MODE ALWAYS</span>
+    <span class="hot">// DEVELOPER</span><span>CREATOR</span><span>PHOTOGRAPHER</span><span class="hot">// TORONTO CA</span><span>TYPESCRIPT</span><span>REACT</span><span class="hot">// AI TOOLS</span><span>NIKON D3200</span><span>HACK CLUB</span><span class="hot">// THEALXLABS.CA</span><span>35+ REPOS</span><span>SHIP FAST</span><span>OPEN SOURCE</span><span class="hot">// CONDUCTOR</span><span>ARCHITECT</span><span>DARK MODE ALWAYS</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ABOUT STRIP -->
+  <section class="about-strip">
+    <div class="about-grid">
+      <div class="about-left">
+        <h2>SOFTWARE.<br/>AI TOOLS.<br/><em>OPEN SOURCE.</em></h2>
+        <p><strong>thealxlabs</strong> is Alexander Wondwossen's digital studio — AI integrations, developer tooling, and experimental software built in Toronto. Industrial minimalism. Structural UI. TypeScript by default.</p>
+        <p>Member of Hack Club, Dirac app, and The Local Code Team. Everything here is self-initiated — no briefs, no clients, just problems worth solving.</p>
+        <br/>
+        <a href="/about" class="btn btn-outline">About the lab →</a>
+      </div>
+      <div>
+        <div class="stat-grid">
+          <div class="stat"><div class="stat-num">35+</div><div class="stat-label">repos on GitHub</div></div>
+          <div class="stat"><div class="stat-num">01</div><div class="stat-label">person in the lab</div></div>
+          <div class="stat"><div class="stat-num">25</div><div class="stat-label">conductor plugins</div></div>
+          <div class="stat"><div class="stat-num">0</div><div class="stat-label">meetings scheduled</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FEATURED PROJECTS PREVIEW -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">FEATURED</h2>
+      <span class="section-sub">// a taste of what's in the lab</span>
+    </div>
+    <div class="projects-grid">
+      <a href="https://github.com/thealxlabs/Conductor" target="_blank" class="project-card hosted">
+        <div class="card-label">// AI Integration Hub · TypeScript</div>
+        <div class="card-title">Conductor</div>
+        <div class="card-desc">AI integration hub with 25 plugins and 146 tools. Connects Claude, GPT-4o, and Gemini to Gmail, Spotify, GitHub, Vercel, Notion, and more.</div>
+        <div class="card-footer"><span class="card-tag">AI</span><span class="card-tag">★ 2</span><span class="card-arrow">→</span></div>
+      </a>
+      <a href="https://github.com/thealxlabs/ARCHITECT" target="_blank" class="project-card">
+        <div class="card-label">// Free · Open Source · TypeScript</div>
+        <div class="card-title">ARCHITECT</div>
+        <div class="card-desc">Free AI-powered code quality and security analyzer. Scans your codebase, spots issues, and suggests fixes — before they ship.</div>
+        <div class="card-footer"><span class="card-tag">Security</span><span class="card-tag">AI</span><span class="card-arrow">→</span></div>
+      </a>
+      <a href="https://aethr.vercel.app" target="_blank" class="project-card">
+        <div class="card-label">// Weather · JavaScript</div>
+        <div class="card-title">Aether Weather</div>
+        <div class="card-desc">Minimalist weather app with brutalist design — pure geometric forms, bold typography, strict black-and-white palette.</div>
+        <div class="card-footer"><span class="card-tag">App</span><span class="card-tag">★ 1</span><span class="card-arrow">→</span></div>
+      </a>
+      <a href="https://github.com/thealxlabs/alx-assistant" target="_blank" class="project-card">
+        <div class="card-label">// AI · TypeScript</div>
+        <div class="card-title">ALX Assistant</div>
+        <div class="card-desc">Personal AI assistant powered by Gemini API. Connects to various services and handles tasks so you don't have to.</div>
+        <div class="card-footer"><span class="card-tag">AI</span><span class="card-arrow">→</span></div>
+      </a>
+    </div>
+    <a href="/projects" class="see-all">See all 35+ projects on GitHub →</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- TERMINAL WIDGET -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">TERMINAL</h2>
+      <span class="section-sub">// live from the lab</span>
+    </div>
+    <div class="terminal">
+      <div class="term-bar">
+        <div class="term-dots"><span class="td red"></span><span class="td yellow"></span><span class="td green"></span></div>
+        <span class="term-title">alx@thealxlabs ~ — zsh</span>
+      </div>
+      <div class="term-body" id="termBody">
+        <div class="term-line"><span class="term-prompt">alx@lab:~$</span> <span class="term-cmd">whoami</span></div>
+        <div class="term-line term-out">Alexander Wondwossen // thealxlabs // TypeScript · React · AI Tools // Toronto, CA</div>
+        <div class="term-line"><span class="term-prompt">alx@lab:~$</span> <span class="term-cmd">cat now.txt</span></div>
+        <div class="term-line term-out" id="nowLine">Loading...</div>
+        <div class="term-line"><span class="term-prompt">alx@lab:~$</span> <span class="term-cmd">uptime</span></div>
+        <div class="term-line term-out" id="uptimeLine">Calculating...</div>
+        <div class="term-line"><span class="term-prompt">alx@lab:~$</span> <span class="term-cmd">ls projects/</span></div>
+        <div class="term-line term-out">conductor/ architect/ aether-weather/ alx-assistant/ basalt/ cipher/ bob-ai/ exif-dashboard-pro/ aethr-gtk-theme/ alx-stuff/ [+25 more]</div>
+        <div class="term-line"><span class="term-prompt">alx@lab:~$</span> <span class="term-blink">▋</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- NOW / CURRENTLY BUILDING -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">NOW</h2>
+      <span class="section-sub">// what's happening in the lab right now</span>
+    </div>
+    <div class="now-grid">
+      <div class="now-card building">
+        <div class="now-label">// currently shipping</div>
+        <div class="now-title">Always Something</div>
+        <div class="now-desc">There's always something in the pipeline — AI integrations, dev tools, open-source experiments. Check GitHub for live progress.</div>
+        <div class="now-bar"><div class="now-fill" style="width:60%"></div></div>
+        <div class="now-pct">always building</div>
+      </div>
+      <div class="now-card shooting">
+        <div class="now-label">// currently shooting</div>
+        <div class="now-title">Toronto Grid Series</div>
+        <div class="now-desc">Documenting the structural geometry of Toronto's downtown core. Nikon D3200, 55mm prime, manual everything.</div>
+        <div class="now-meta"><i data-lucide="camera" width="12" height="12" style="display:inline;vertical-align:middle;margin-right:4px"></i>@alexedgraphy on Instagram</div>
+      </div>
+      <div class="now-card listening">
+        <div class="now-label">// currently listening</div>
+        <div class="now-title" id="vibeTitle">Late night coding playlist</div>
+        <div class="now-desc" id="vibeDesc">Whatever keeps the momentum going past midnight. The lab runs on caffeine and good audio.</div>
+        <div class="now-meta" id="vibeMeta"><i data-lucide="headphones" width="12" height="12" style="display:inline;vertical-align:middle;margin-right:4px"></i>Spotify</div>
+      </div>
+      <div class="now-card reading">
+        <div class="now-label">// currently thinking about</div>
+        <div class="now-title" id="thoughtTitle">Loading thought...</div>
+        <div class="now-desc" id="thoughtDesc"></div>
+        <button onclick="newThought()" class="now-refresh">↺ new thought</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- RANDOM LAB NOTE -->
+  <section class="section">
+    <div class="lab-note">
+      <div class="lab-note-tag">// LAB NOTE #<span id="noteNum">001</span></div>
+      <div class="lab-note-text" id="noteText">Loading...</div>
+      <button onclick="newNote()" class="note-btn">↺ another one</button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">THEALXLABS</div>
+    <div class="footer-links">
+      <a href="/projects">Projects</a>
+      <a href="/about">About</a>
+      <a href="/stack">Stack</a>
+      <a href="/contact">Contact</a>
+      <a href="https://github.com/thealxlabs" target="_blank">GitHub</a>
+    </div>
+    <div class="footer-copy">© 2026 thealxlabs.ca</div>
+  </footer>
+</div>
+
+<script>
+  lucide.createIcons();
+  // cursor glow
+  document.addEventListener('mousemove',e=>{const g=document.getElementById('glow');if(g){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';}});
+  // cursor trail
+  (function(){const trail=[];for(let i=0;i<12;i++){const d=document.createElement('div');d.style.cssText='position:fixed;width:6px;height:6px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:9999;opacity:0;transition:opacity 0.3s;transform:translate(-50%,-50%)';document.body.appendChild(d);trail.push({el:d,x:0,y:0});}let mx=0,my=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});setInterval(()=>{let lx=mx,ly=my;trail.forEach((t,i)=>{const ox=lx,oy=ly;t.el.style.left=t.x+'px';t.el.style.top=t.y+'px';t.el.style.opacity=String((12-i)/24);t.el.style.width=(6-i*0.3)+'px';t.el.style.height=(6-i*0.3)+'px';lx=t.x;ly=t.y;t.x+=(ox-t.x)*0.35;t.y+=(oy-t.y)*0.35;});},16);})();
+  // logo glitch
+  const logo=document.querySelector('.logo');if(logo)logo.addEventListener('mouseenter',()=>{logo.style.transform=`skewX(${(Math.random()-0.5)*6}deg)`;setTimeout(()=>logo.style.transform='',150);});
+  // clock
+  function tick(){const el=document.getElementById('clock');if(el)el.textContent=new Date().toLocaleTimeString('en-CA',{timeZone:'America/Toronto',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+' ET';}tick();setInterval(tick,1000);
+  // EASTER EGG - type ALX
+  (function(){let buf='';document.addEventListener('keydown',e=>{buf=(buf+e.key).slice(-3).toUpperCase();if(buf==='ALX'){buf='';const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0a0a;cursor:pointer;';o.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:clamp(4rem,15vw,12rem);color:#ff3c00;animation:glitch 0.3s infinite;line-height:0.9;text-align:center">THE<br/>ALX<br/>LABS</div><div style="font-family:Space Mono,monospace;font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:24px;letter-spacing:0.2em">// YOU FOUND THE EASTER EGG. CLICK TO ESCAPE.</div><style>@keyframes glitch{0%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}33%{text-shadow:-3px 0 #ffe600,3px 0 #00ffcc;}66%{text-shadow:3px 2px #ff3c00,-3px -2px #00ffcc;}100%{text-shadow:2px 0 #00ffcc,-2px 0 #ffe600;}}</style>';document.body.appendChild(o);o.addEventListener('click',()=>o.remove());}});})();
+</script>
+</body>
+</html>
